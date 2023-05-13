@@ -53,8 +53,6 @@ class LoginFragment : Fragment() {
             }
 
 
-
-
         }
 
         binding.toRegistro.setOnClickListener {

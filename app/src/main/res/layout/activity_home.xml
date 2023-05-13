@@ -6,10 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".home.HomeActivity">
 
-    <TextView
-        android:id="@+id/welcome"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ciudades_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="match_parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

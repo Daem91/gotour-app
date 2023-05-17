@@ -6,9 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".home.HomeActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ciudades_recycler_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:id="@+id/barra_busqueda"
+            android:iconifiedByDefault="false"
+            android:queryHint="Buscar una ciudad"
+            android:layout_marginHorizontal="16dp"
+            android:background="@drawable/searchbar_background"
+            android:layout_marginTop="20dp"
+
+            android:layout_marginBottom="16dp"
+            android:queryBackground="@android:color/transparent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ciudades_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

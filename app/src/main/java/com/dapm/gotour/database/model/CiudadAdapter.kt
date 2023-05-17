@@ -18,13 +18,18 @@ import com.dapm.gotour.home.DestinoActivity
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 
-class CiudadAdapter (private val ciudades: List<Ciudad>) : RecyclerView.Adapter<CiudadAdapter.CiudadHolder>(){
+class CiudadAdapter (private var ciudades: List<Ciudad>) : RecyclerView.Adapter<CiudadAdapter.CiudadHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CiudadHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = CiudadCardLayoutBinding.inflate(inflater, parent, false)
         val view = LayoutInflater.from(parent.context).inflate(R.layout.ciudad_card_layout, parent, false)
         return CiudadHolder(binding)
+    }
+
+    fun setListaFiltrada(ciudades: List<Ciudad>) {
+        this.ciudades = ciudades
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: CiudadHolder, position: Int) {

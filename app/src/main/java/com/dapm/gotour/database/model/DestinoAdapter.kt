@@ -13,14 +13,16 @@ import com.dapm.gotour.home.DestinoActivity
 import com.dapm.gotour.home.DetalleActivity
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
-class DestinoAdapter(private val destinos: List<Destino>) : RecyclerView.Adapter<DestinoAdapter.DestinoHolder>() {
-
-    private lateinit var ciudad: Ciudad
-    private lateinit var dataBaseHandler: DataBaseHandler
+class DestinoAdapter(private var destinos: List<Destino>) : RecyclerView.Adapter<DestinoAdapter.DestinoHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DestinoHolder {
         val binding = DestinoCardLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return DestinoHolder(binding)
+    }
+
+    fun setListaFiltrada(destinos: List<Destino>) {
+        this.destinos = destinos
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: DestinoHolder, position: Int) {

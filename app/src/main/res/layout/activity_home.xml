@@ -24,6 +24,15 @@
             android:queryBackground="@android:color/transparent"
             android:layout_height="wrap_content"/>
 
+
+        <Button
+            android:id="@+id/itinerarios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="Itinerarios"
+            android:layout_marginRight="16dp" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ciudades_recycler_view"
             android:layout_width="match_parent"

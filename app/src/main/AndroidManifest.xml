@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -16,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GoTour"
         tools:targetApi="31">
+        <activity
+            android:name=".itinerarios.ActivityCreateItinerary"
+            android:exported="false" />
+        <activity
+            android:name=".itinerarios.ItinerariosActivity"
+            android:exported="false" />
         <activity
             android:name=".home.DetalleActivity"
             android:exported="false" />

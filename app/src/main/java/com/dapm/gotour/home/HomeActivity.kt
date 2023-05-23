@@ -4,10 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.InputBinding
-import android.widget.ImageView
-import android.widget.SearchView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -17,26 +14,23 @@ import com.dapm.gotour.database.config.DataBaseInitializer
 import com.dapm.gotour.database.model.Ciudad
 import com.dapm.gotour.database.model.CiudadAdapter
 import com.dapm.gotour.databinding.ActivityHomeBinding
+import com.dapm.gotour.itinerarios.ItinerariosActivity
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import java.util.*
 import kotlin.collections.ArrayList
-
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var ciudadAdapter: CiudadAdapter
-    lateinit var binding : ActivityHomeBinding
+    private lateinit var binding: ActivityHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        recyclerView = findViewById(R.id.ciudades_recycler_view)
+        recyclerView = binding.ciudadesRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-        val username = intent.getStringExtra("usuario")
 
         val dataBaseHandler = DataBaseHandler(this)
         val ciudades = dataBaseHandler.listarCiudades()
@@ -56,18 +50,21 @@ class HomeActivity : AppCompatActivity() {
 
         })
 
+        val btnItinerarios: Button = binding.itinerarios
+        btnItinerarios.setOnClickListener {
+            val intent = Intent(this, ItinerariosActivity::class.java)
+            startActivity(intent)
+        }
     }
 
-
     fun filtrarCiudades(query: String?) {
-
         val dataBaseHandler = DataBaseHandler(this)
         val ciudades = dataBaseHandler.listarCiudades()
 
         if (query != null) {
             val listaFiltrada = ArrayList<Ciudad>()
             for (i in ciudades) {
-                if (i.nombre.lowercase(Locale.ROOT).contains(query)){
+                if (i.nombre.lowercase(Locale.ROOT).contains(query)) {
                     listaFiltrada.add(i)
                 }
             }
@@ -78,7 +75,5 @@ class HomeActivity : AppCompatActivity() {
                 ciudadAdapter.setListaFiltrada(listaFiltrada)
             }
         }
-
     }
-
 }

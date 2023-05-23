@@ -3,13 +3,16 @@ package com.dapm.gotour.database.config
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.preference.PreferenceManager
 import android.widget.Toast
 import com.dapm.gotour.database.model.Ciudad
 import com.dapm.gotour.database.model.Destino
+import com.dapm.gotour.database.model.Itinerario
 import com.dapm.gotour.database.model.Usuario
+import java.lang.Exception
 
 val DATABASE_NAME = "GoTout_DB"
 
@@ -18,18 +21,24 @@ val COL_PASS = "password"
 val TABLE_USUARIO = "Usuario"
 val TABLE_CIUDAD = "Ciudad"
 val TABLE_DESTINO = "Destino"
+val TABLE_ITINERARIO = "Itinerario"
+
 val KEY_CIUDAD = "id_ciudad"
 val NAME_CIUDAD = "nombre"
 val DEPARTAMENTO_CIUDAD = "departamento"
+
 class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createUser = "CREATE TABLE Usuario(username TEXT PRIMARY KEY, password TEXT)";
         val createCity = "CREATE TABLE Ciudad(id_ciudad INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, departamento TEXT, imagen TEXT)";
         val createDestination = "CREATE TABLE Destino(id_destino INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, ubicacion TEXT, imagen TEXT, id_ciudad INTEGER, FOREIGN KEY(id_ciudad) REFERENCES Ciudad(id_ciudad))"
+        val createItinerario = "CREATE TABLE Itinerario(id_itinerario INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, fecha_inicio TEXT, fecha_fin TEXT,  username TEXT, FOREIGN KEY(username) REFERENCES Usuario(username))"
+
         db?.execSQL(createUser)
         db?.execSQL(createCity)
         db?.execSQL(createDestination)
+        db?.execSQL(createItinerario)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -37,6 +46,10 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_USUARIO")
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_CIUDAD")
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_DESTINO")
+        db?.execSQL("DROP TABLE IF EXISTS $TABLE_DESTINO")
+        db?.execSQL("DROP TABLE IF EXISTS $TABLE_ITINERARIO")
+
+
     }
 
 
@@ -185,6 +198,53 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
 
         return destino
     }
+
+    // ----------------------
+    // | METODOS DE ITINERARIO |
+    // ----------------------
+
+    fun crearItinerario(itinerario: Itinerario) {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put("nombre", itinerario.nombre)
+        cv.put("fecha_inicio", itinerario.fecha_inicio)
+        cv.put("fecha_fin", itinerario.fecha_fin)
+        cv.put("username", itinerario.id_usuario)
+        db.insert(TABLE_ITINERARIO, null, cv)
+        db.close()
+    }
+
+    fun obtenerItinerarios(): ArrayList<Itinerario> {
+        val itinerarios = ArrayList<Itinerario>()
+        val db = this.readableDatabase
+        val query = "SELECT * FROM Itinerario"
+
+        val cursor: Cursor?
+
+        cursor = db.rawQuery(query, null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                val idItinerario = cursor.getInt(cursor.getColumnIndexOrThrow("id_itinerario"))
+                val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
+                val fechaInicio = cursor.getString(cursor.getColumnIndexOrThrow("fecha_inicio"))
+                val fechaFin = cursor.getString(cursor.getColumnIndexOrThrow("fecha_fin"))
+                val idUsuario=1
+
+                val itinerario = Itinerario(id_itinerario = idItinerario, nombre = nombre, fecha_inicio = fechaInicio, fecha_fin = fechaFin, id_usuario = 1)
+                itinerarios.add(itinerario)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+
+        return itinerarios
+    }
+
+
+
+
 
 
 }

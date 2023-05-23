@@ -60,7 +60,7 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
     fun createUsuario(usuario: Usuario): Boolean {
         val db = this.writableDatabase
         val cv = ContentValues()
-        cv.put(COL_USERNAME, usuario.username)
+        cv.put(COL_USERNAME, Usuario.username)
         cv.put(COL_PASS, usuario.contrasena)
         val resultado = db.insert(TABLE_USUARIO, null, cv)
 
@@ -72,7 +72,7 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
     }
 
     fun comprobarUsuario(usuario: Usuario): Boolean {
-        val username = usuario.username
+        val username = Usuario.username
         val contrasena = usuario.contrasena
         val db = this.writableDatabase
         val query = "SELECT * FROM Usuario WHERE username = '$username' " +
@@ -209,7 +209,7 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         cv.put("nombre", itinerario.nombre)
         cv.put("fecha_inicio", itinerario.fecha_inicio)
         cv.put("fecha_fin", itinerario.fecha_fin)
-        cv.put("username", itinerario.id_usuario)
+        cv.put("username", itinerario.username)
         db.insert(TABLE_ITINERARIO, null, cv)
         db.close()
     }
@@ -229,9 +229,38 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
                 val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
                 val fechaInicio = cursor.getString(cursor.getColumnIndexOrThrow("fecha_inicio"))
                 val fechaFin = cursor.getString(cursor.getColumnIndexOrThrow("fecha_fin"))
-                val idUsuario=1
+                val usernameUsuario = cursor.getString(cursor.getColumnIndexOrThrow("username"))
+                //val idUsuario=1
 
-                val itinerario = Itinerario(id_itinerario = idItinerario, nombre = nombre, fecha_inicio = fechaInicio, fecha_fin = fechaFin, id_usuario = 1)
+                val itinerario = Itinerario(id_itinerario = idItinerario, nombre = nombre, fecha_inicio = fechaInicio, fecha_fin = fechaFin, username = usernameUsuario)
+                itinerarios.add(itinerario)
+            } while (cursor.moveToNext())
+        }
+        println(itinerarios)
+        cursor.close()
+        db.close()
+
+        return itinerarios
+    }
+
+    fun obtenerItinerariosPorUsername(username: String): ArrayList<Itinerario> {
+        val itinerarios = ArrayList<Itinerario>()
+        val db = this.readableDatabase
+        val query = "SELECT * FROM Itinerario WHERE username = '$username'"
+
+        val cursor: Cursor?
+
+        cursor = db.rawQuery(query, null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                val idItinerario = cursor.getInt(cursor.getColumnIndexOrThrow("id_itinerario"))
+                val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
+                val fechaInicio = cursor.getString(cursor.getColumnIndexOrThrow("fecha_inicio"))
+                val fechaFin = cursor.getString(cursor.getColumnIndexOrThrow("fecha_fin"))
+                val usernameUsuario = cursor.getString(cursor.getColumnIndexOrThrow("username"))
+
+                val itinerario = Itinerario(id_itinerario = idItinerario, nombre = nombre, fecha_inicio = fechaInicio, fecha_fin = fechaFin, username = usernameUsuario)
                 itinerarios.add(itinerario)
             } while (cursor.moveToNext())
         }
@@ -240,6 +269,7 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         db.close()
 
         return itinerarios
+
     }
 
 

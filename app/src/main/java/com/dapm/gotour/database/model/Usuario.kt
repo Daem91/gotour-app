@@ -1,14 +1,16 @@
 package com.dapm.gotour.database.model
 
 class Usuario {
+    companion object{
+        var username: String = ""
+    }
 
-    var username: String = ""
     var contrasena: String = ""
 
     constructor(
         username: String, contrasena: String
     ) {
-        this.username = username
+        Companion.username = username
         this.contrasena = contrasena
     }
 

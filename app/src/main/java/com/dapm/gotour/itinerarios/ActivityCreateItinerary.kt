@@ -15,6 +15,7 @@ import android.widget.Toast
 import com.dapm.gotour.database.config.DataBaseHandler
 import com.dapm.gotour.database.config.TABLE_ITINERARIO
 import com.dapm.gotour.database.model.Itinerario
+import com.dapm.gotour.database.model.Usuario
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -65,9 +66,9 @@ class ActivityCreateItinerary : AppCompatActivity() {
         val nombre = etNombre.text.toString()
         val fechaInicio = etFechaInicio.text.toString()
         val fechaFin = etFechaFin.text.toString()
-        val idUsuario = 1 // Asegúrate de tener un método para obtener el ID de usuario actual
+        val usernameUsuario = Usuario.username // Asegúrate de tener un método para obtener el ID de usuario actual
 
-        val itinerario = Itinerario(null, nombre, fechaInicio, fechaFin, idUsuario)
+        val itinerario = Itinerario(null, nombre, fechaInicio, fechaFin, usernameUsuario)
 
         dbHandler.crearItinerario(itinerario)
         mostrarMensajeExito()

@@ -11,6 +11,7 @@ import com.dapm.gotour.R
 import com.dapm.gotour.database.config.DataBaseHandler
 import com.dapm.gotour.database.model.Itinerario
 import com.dapm.gotour.database.model.ItinerarioAdapter
+import com.dapm.gotour.database.model.Usuario
 import com.dapm.gotour.databinding.ActivityHomeBinding
 
 import com.dapm.gotour.databinding.ActivityItinerariosBinding
@@ -23,6 +24,8 @@ class ItinerariosActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityItinerariosBinding
     private var adapter:ItinerarioAdapter?=null
+
+    private val username = Usuario.username
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +45,7 @@ class ItinerariosActivity : AppCompatActivity() {
 
     private fun obtenerItinerarios(): ArrayList<Itinerario> {
         val dbHandler = DataBaseHandler(this)
-        return dbHandler.obtenerItinerarios()
+        return dbHandler.obtenerItinerariosPorUsername(username)
     }
 
     private fun iniRecyclerView() {

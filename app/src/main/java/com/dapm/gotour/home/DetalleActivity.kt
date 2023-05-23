@@ -1,6 +1,7 @@
 package com.dapm.gotour.home
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.graphics.text.LineBreaker.JUSTIFICATION_MODE_INTER_WORD
@@ -19,6 +20,7 @@ import com.dapm.gotour.database.config.DataBaseHandler
 import com.dapm.gotour.database.model.Destino
 
 import com.dapm.gotour.databinding.ActivityDetalleBinding
+import com.dapm.gotour.itinerarios.AgregarDestinoActivity
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import java.io.File
 
@@ -59,7 +61,12 @@ class DetalleActivity : AppCompatActivity() {
             descripcion.justificationMode  = JUSTIFICATION_MODE_INTER_WORD
         }
 
-
+        binding.favButton.setOnClickListener{
+            val intent = Intent(this, AgregarDestinoActivity::class.java)
+            intent.putExtra("id_destino",destino.id_destino)
+            intent.putExtra("name_destino",destino.nombre)
+            startActivity(intent)
+        }
 
     }
 }

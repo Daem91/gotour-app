@@ -15,6 +15,7 @@ import com.dapm.gotour.database.model.Usuario
 import com.dapm.gotour.databinding.ActivityHomeBinding
 
 import com.dapm.gotour.databinding.ActivityItinerariosBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ItinerariosActivity : AppCompatActivity() {
 
@@ -30,7 +31,7 @@ class ItinerariosActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityItinerariosBinding.inflate(layoutInflater) // Inicializa el objeto de enlace (binding)
+        binding = ActivityItinerariosBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
@@ -38,12 +39,13 @@ class ItinerariosActivity : AppCompatActivity() {
         btnCrearItinerario.setOnClickListener {
             val intent = Intent(this, ActivityCreateItinerary::class.java)
             startActivity(intent)
+            finish()
         }
 
         iniRecyclerView()
 
-        
-        
+
+
     }
 
     private fun obtenerItinerarios(): ArrayList<Itinerario> {

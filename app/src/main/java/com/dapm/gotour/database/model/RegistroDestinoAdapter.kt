@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dapm.gotour.R
 import com.dapm.gotour.itinerarios.VerItinerarioActivity
 
-class RegistroDestinoAdapter(private val nombresDestino: List<String>) : RecyclerView.Adapter<RegistroDestinoAdapter.RegistroDestinoViewHolder>() {
+class RegistroDestinoAdapter(private val destinos: List<Pair<String, String>>) : RecyclerView.Adapter<RegistroDestinoAdapter.RegistroDestinoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RegistroDestinoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.ver_registros_card_layout, parent, false)
@@ -17,19 +17,21 @@ class RegistroDestinoAdapter(private val nombresDestino: List<String>) : Recycle
     }
 
     override fun onBindViewHolder(holder: RegistroDestinoViewHolder, position: Int) {
-        val nombreDestino = nombresDestino[position]
-        holder.bindView(nombreDestino)
+        val destino = destinos[position]
+        holder.bindView(destino)
     }
 
     override fun getItemCount(): Int {
-        return nombresDestino.size
+        return destinos.size
     }
 
     class RegistroDestinoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nombreTextView: TextView = itemView.findViewById(R.id.txtRegistro)
+        private val fechaTextView: TextView = itemView.findViewById(R.id.txtFecha)
 
-        fun bindView(nombreDestino: String) {
-            nombreTextView.text = nombreDestino
+        fun bindView(destino: Pair<String, String>) {
+            nombreTextView.text = destino.first
+            fechaTextView.text = destino.second
         }
     }
 }

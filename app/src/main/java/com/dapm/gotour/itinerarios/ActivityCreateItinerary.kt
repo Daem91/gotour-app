@@ -55,7 +55,20 @@ class ActivityCreateItinerary : AppCompatActivity() {
         btnGuardarItinerario = findViewById(R.id.btnCrearItinerario)
         btnCancel = findViewById(R.id.btnCancelar)
 
-        btnGuardarItinerario.setOnClickListener { guardarItinerario() }
+        btnCancel.setOnClickListener{ finish() }
+
+        btnGuardarItinerario.setOnClickListener {
+            val nombre = etNombre.text.toString()
+            val fechaInicio = etFechaInicio.text.toString()
+            val fechaFin = etFechaFin.text.toString()
+
+            if (nombre.isNotEmpty() && fechaInicio.isNotEmpty() && fechaFin.isNotEmpty()) {
+                guardarItinerario()
+            } else {
+                Toast.makeText(this, "Por favor, completa todos los campos.", Toast.LENGTH_SHORT).show()
+            }
+
+        }
 
         dbHandler = DataBaseHandler(this)
 
@@ -76,6 +89,7 @@ class ActivityCreateItinerary : AppCompatActivity() {
 
         val itinerarios = Intent(this, ItinerariosActivity::class.java)
         startActivity(itinerarios)
+        finish()
     }
 
 

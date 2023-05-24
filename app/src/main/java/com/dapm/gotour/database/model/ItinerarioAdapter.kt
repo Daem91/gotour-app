@@ -56,6 +56,8 @@ class ItinerarioAdapter:RecyclerView.Adapter<ItinerarioAdapter.ItinerarioViewHol
                 val intent = Intent(view.context, VerItinerarioActivity::class.java)
                 intent.putExtra("id_itinerario",iti.id_itinerario)
                 intent.putExtra("name_itinerario",iti.nombre)
+                intent.putExtra("fechaI",iti.fecha_inicio)
+                intent.putExtra("fechaF",iti.fecha_fin)
                 view.context.startActivity(intent)
             }
 

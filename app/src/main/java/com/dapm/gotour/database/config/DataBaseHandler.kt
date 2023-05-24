@@ -33,7 +33,7 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         val createCity = "CREATE TABLE Ciudad(id_ciudad INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, departamento TEXT, imagen TEXT)";
         val createDestination = "CREATE TABLE Destino(id_destino INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, ubicacion TEXT, imagen TEXT, id_ciudad INTEGER, FOREIGN KEY(id_ciudad) REFERENCES Ciudad(id_ciudad))"
         val createItinerario = "CREATE TABLE Itinerario(id_itinerario INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, fecha_inicio TEXT, fecha_fin TEXT,  username TEXT, FOREIGN KEY(username) REFERENCES Usuario(username))"
-        val createRegistro = "CREATE TABLE RegistroDestino(id_registro INTEGER PRIMARY KEY AUTOINCREMENT, id_destino INTEGER, id_itinerario INTEGER, FOREIGN KEY(id_destino) REFERENCES Destino(id_destino), FOREIGN KEY(id_itinerario) REFERENCES Itinerario(id_itinerario))"
+        val createRegistro = "CREATE TABLE RegistroDestino(id_registro INTEGER PRIMARY KEY AUTOINCREMENT, id_destino INTEGER, id_itinerario INTEGER, fecha TEXT, FOREIGN KEY(id_destino) REFERENCES Destino(id_destino), FOREIGN KEY(id_itinerario) REFERENCES Itinerario(id_itinerario))"
         db?.execSQL(createUser)
         db?.execSQL(createCity)
         db?.execSQL(createDestination)
@@ -283,11 +283,12 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         val cv = ContentValues()
         cv.put("id_destino", registro.id_destino)
         cv.put("id_itinerario", registro.id_itinerario)
+        cv.put("fecha", registro.fecha)
 
         db.insert(TABLE_REGISTRO, null, cv)
         db.close()
     }
-
+    /*
     fun obtenerDestinosPorRegistro():ArrayList<RegistroDestino>{
         val registros = ArrayList<RegistroDestino>()
         val db = this.readableDatabase
@@ -313,7 +314,7 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
 
         return registros
     }
-
+*/
 
     fun obtenerNombresDestinoPorRegistroItinerario(idItinerario: Int): List<String> {
         val nombresDestino = mutableListOf<String>()
@@ -333,6 +334,28 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         db.close()
         return nombresDestino
     }
+
+    fun obtenerDestinosRegistradosPorItinerario(idItinerario: Int): List<Pair<String, String>> {
+        val destinosRegistrados = mutableListOf<Pair<String, String>>()
+        val db = this.readableDatabase
+        val query = "SELECT d.nombre, r.fecha FROM Destino d " +
+                "INNER JOIN RegistroDestino r ON d.id_destino = r.id_destino " +
+                "WHERE r.id_itinerario = ?"
+        val selectionArgs = arrayOf(idItinerario.toString())
+        val cursor = db.rawQuery(query, selectionArgs)
+
+        while (cursor.moveToNext()) {
+            val nombreDestino = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
+            val fecha = cursor.getString(cursor.getColumnIndexOrThrow("fecha"))
+            val destinoRegistrado = Pair(nombreDestino, fecha)
+            destinosRegistrados.add(destinoRegistrado)
+        }
+
+        cursor.close()
+        db.close()
+        return destinosRegistrados
+    }
+
 
 
 

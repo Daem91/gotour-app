@@ -12,7 +12,7 @@ import com.dapm.gotour.database.model.RegistroDestinoAdapter
 class VerItinerarioActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RegistroDestinoAdapter
-    
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +27,21 @@ class VerItinerarioActivity : AppCompatActivity() {
         val txt = findViewById<TextView>(R.id.tvTitle)
         txt.text = nameItinerario
 
+        val fechaI = intent.getStringExtra("fechaI")
+
+        val fechaInicio = findViewById<TextView>(R.id.fechaI)
+        fechaInicio.text = fechaI
+
+        val fechaF = intent.getStringExtra("fechaF")
+
+        val fechaFinal = findViewById<TextView>(R.id.fechaF)
+        fechaFinal.text = fechaF
+
+
+
         val dataBaseHandler=DataBaseHandler(this)
-        val nombresDestino=dataBaseHandler.obtenerNombresDestinoPorRegistroItinerario(idItinerario)
-        adapter = RegistroDestinoAdapter(nombresDestino) 
+        val destinosRegistrados = dataBaseHandler.obtenerDestinosRegistradosPorItinerario(idItinerario)
+        adapter = RegistroDestinoAdapter(destinosRegistrados)
         recyclerView.adapter = adapter
     }
 }

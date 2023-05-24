@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/btn_bg.xml" value="0.199" />
+        <entry key="app/src/main/res/drawable/round_button.xml" value="0.199" />
         <entry key="app/src/main/res/layout/activity_agregar_destino.xml" value="0.2767210144927536" />
         <entry key="app/src/main/res/layout/activity_create_itinerary.xml" value="0.22552083333333334" />
         <entry key="app/src/main/res/layout/activity_detalle.xml" value="0.2767210144927536" />
@@ -13,6 +15,8 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_ver_itinerario.xml" value="0.24583333333333332" />
         <entry key="app/src/main/res/layout/destino_card_layout.xml" value="0.12259371833839919" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.1585612968591692" />
+        <entry key="app/src/main/res/layout/fragment_registro.xml" value="0.1585612968591692" />
         <entry key="app/src/main/res/layout/itinerario_card_layout.xml" value="0.20418848167539266" />
         <entry key="app/src/main/res/layout/ver_registros_card_layourt.xml" value="0.24479166666666666" />
         <entry key="app/src/main/res/layout/ver_registros_card_layout.xml" value="0.24479166666666666" />

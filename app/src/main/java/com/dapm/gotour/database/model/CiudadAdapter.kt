@@ -46,7 +46,7 @@ class CiudadAdapter (private var ciudades: List<Ciudad>) : RecyclerView.Adapter<
 
         fun enlazar(ciudad: Ciudad) {
             binding.apply {
-                ciudadNombre.text = ciudad.nombre + " " + ciudad.id_ciudad
+                ciudadNombre.text = ciudad.nombre
                 departamentoNombre.text = ciudad.departamento
 
                 agregarImagen(imagenCiudad, ciudad.imagen)

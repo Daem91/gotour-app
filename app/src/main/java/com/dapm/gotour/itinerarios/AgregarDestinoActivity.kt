@@ -3,6 +3,7 @@ package com.dapm.gotour.itinerarios
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
@@ -11,6 +12,7 @@ import com.dapm.gotour.R
 import com.dapm.gotour.database.config.DataBaseHandler
 import com.dapm.gotour.database.model.Destino
 import com.dapm.gotour.database.model.Itinerario
+import com.dapm.gotour.database.model.RegistroDestino
 import com.dapm.gotour.database.model.Usuario
 import com.dapm.gotour.databinding.ActivityAgregarDestinoBinding
 
@@ -59,9 +61,14 @@ class AgregarDestinoActivity : AppCompatActivity() {
                     val itinerarioSeleccionado = itinerarios.find { it.nombre == nombreItinerarioSeleccionado }
 
                     itinerarioSeleccionado?.let {
-                        val idItinerarioSeleccionado = it.id_itinerario
+                        val idItinerarioSeleccionado = it.id_itinerario ?:1
+                        agregarDestinoItinerario(idItinerarioSeleccionado, id_destino)
+
+
                     }
-                    mostrarMensajeExito()
+
+
+
                     //val itinerario = Intent(this, ItinerarioActivity::class.java)
                     //startActivity(itinerario)
                 }
@@ -74,4 +81,23 @@ class AgregarDestinoActivity : AppCompatActivity() {
     private fun mostrarMensajeExito(){
         Toast.makeText(this,"Destino añadido con éxito.",Toast.LENGTH_SHORT).show()
     }
+
+    private fun agregarDestinoItinerario(idItinerario: Int, idDestino: Int){
+        val registro = RegistroDestino(null, idDestino,idItinerario )
+        dbHandler.crearRegistro(registro)
+        Log.e("Registro", "ID Registro: ${registro.id_registro}, ID Itinerario: ${registro.id_itinerario}, ID Destino: ${registro.id_destino}")
+        mostrarMensajeExito()
+
+        val nombresDestino = dbHandler.obtenerNombresDestinoPorRegistroItinerario(idItinerario)
+        for (nombreDestino in nombresDestino) {
+            Log.d("Destino", nombreDestino)
+        }
+
+    }
+
+
+
+
+
+
 }

@@ -8,10 +8,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.preference.PreferenceManager
 import android.widget.Toast
-import com.dapm.gotour.database.model.Ciudad
-import com.dapm.gotour.database.model.Destino
-import com.dapm.gotour.database.model.Itinerario
-import com.dapm.gotour.database.model.Usuario
+import com.dapm.gotour.database.model.*
 import java.lang.Exception
 
 val DATABASE_NAME = "GoTout_DB"
@@ -22,6 +19,8 @@ val TABLE_USUARIO = "Usuario"
 val TABLE_CIUDAD = "Ciudad"
 val TABLE_DESTINO = "Destino"
 val TABLE_ITINERARIO = "Itinerario"
+val TABLE_REGISTRO="RegistroDestino"
+
 
 val KEY_CIUDAD = "id_ciudad"
 val NAME_CIUDAD = "nombre"
@@ -34,11 +33,13 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         val createCity = "CREATE TABLE Ciudad(id_ciudad INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, departamento TEXT, imagen TEXT)";
         val createDestination = "CREATE TABLE Destino(id_destino INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, ubicacion TEXT, imagen TEXT, id_ciudad INTEGER, FOREIGN KEY(id_ciudad) REFERENCES Ciudad(id_ciudad))"
         val createItinerario = "CREATE TABLE Itinerario(id_itinerario INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, fecha_inicio TEXT, fecha_fin TEXT,  username TEXT, FOREIGN KEY(username) REFERENCES Usuario(username))"
-
+        val createRegistro = "CREATE TABLE RegistroDestino(id_registro INTEGER PRIMARY KEY AUTOINCREMENT, id_destino INTEGER, id_itinerario INTEGER, FOREIGN KEY(id_destino) REFERENCES Destino(id_destino), FOREIGN KEY(id_itinerario) REFERENCES Itinerario(id_itinerario))"
         db?.execSQL(createUser)
         db?.execSQL(createCity)
         db?.execSQL(createDestination)
         db?.execSQL(createItinerario)
+        db?.execSQL(createRegistro)
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -48,7 +49,7 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_DESTINO")
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_DESTINO")
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_ITINERARIO")
-
+        db?.execSQL("DROP TABLE IF EXISTS $TABLE_REGISTRO")
 
     }
 
@@ -272,8 +273,66 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
 
     }
 
+    // ----------------------
+    // | METODOS DE REGISTRO |
+    // ----------------------
 
 
+    fun crearRegistro(registro: RegistroDestino) {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put("id_destino", registro.id_destino)
+        cv.put("id_itinerario", registro.id_itinerario)
+
+        db.insert(TABLE_REGISTRO, null, cv)
+        db.close()
+    }
+
+    fun obtenerDestinosPorRegistro():ArrayList<RegistroDestino>{
+        val registros = ArrayList<RegistroDestino>()
+        val db = this.readableDatabase
+        val query = "SELECT * FROM RegistroDestino"
+
+        val cursor: Cursor?
+
+        cursor = db.rawQuery(query, null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                val idRegistro = cursor.getInt(cursor.getColumnIndexOrThrow("id_registro"))
+                val idDestino = cursor.getInt(cursor.getColumnIndexOrThrow("id_destino"))
+                val idItinerario = cursor.getInt(cursor.getColumnIndexOrThrow("id_itinerario"))
+
+                val registro = RegistroDestino(id_registro = idRegistro, id_destino = idDestino, id_itinerario = idItinerario)
+                registros.add(registro)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+
+        return registros
+    }
+
+
+    fun obtenerNombresDestinoPorRegistroItinerario(idItinerario: Int): List<String> {
+        val nombresDestino = mutableListOf<String>()
+        val db = this.readableDatabase
+        val query = "SELECT d.nombre FROM Destino d " +
+                "INNER JOIN RegistroDestino r ON d.id_destino = r.id_destino " +
+                "WHERE r.id_itinerario = ?"
+        val selectionArgs = arrayOf(idItinerario.toString())
+        val cursor = db.rawQuery(query, selectionArgs)
+
+        while (cursor.moveToNext()) {
+            val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
+            nombresDestino.add(nombre)
+        }
+
+        cursor.close()
+        db.close()
+        return nombresDestino
+    }
 
 
 

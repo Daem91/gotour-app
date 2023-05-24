@@ -66,7 +66,7 @@ class ActivityCreateItinerary : AppCompatActivity() {
         val nombre = etNombre.text.toString()
         val fechaInicio = etFechaInicio.text.toString()
         val fechaFin = etFechaFin.text.toString()
-        val usernameUsuario = Usuario.username // Asegúrate de tener un método para obtener el ID de usuario actual
+        val usernameUsuario = Usuario.username
 
         val itinerario = Itinerario(null, nombre, fechaInicio, fechaFin, usernameUsuario)
 

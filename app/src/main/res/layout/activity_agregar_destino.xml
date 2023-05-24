@@ -62,7 +62,7 @@
             android:id="@+id/empty_itinerarios"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="avemaria"
+            android:text=""
             android:textAlignment="center"
             android:textColor="@color/red"
             android:textStyle="bold"

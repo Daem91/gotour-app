@@ -3,19 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_agregar_destino.xml" value="0.2767210144927536" />
         <entry key="app/src/main/res/layout/activity_create_itinerary.xml" value="0.22552083333333334" />
+        <entry key="app/src/main/res/layout/activity_detalle.xml" value="0.2767210144927536" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.21875" />
         <entry key="app/src/main/res/layout/activity_itinerario_create.xml" value="0.2520833333333333" />
         <entry key="app/src/main/res/layout/activity_itinerario_new.xml" value="0.10916919959473151" />
         <entry key="app/src/main/res/layout/activity_itinerarios.xml" value="0.2520833333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_ver_itinerario.xml" value="0.24583333333333332" />
         <entry key="app/src/main/res/layout/destino_card_layout.xml" value="0.12259371833839919" />
-        <entry key="app/src/main/res/layout/itinerario_card_layout.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/itinerario_card_layout.xml" value="0.20418848167539266" />
+        <entry key="app/src/main/res/layout/ver_registros_card_layourt.xml" value="0.24479166666666666" />
+        <entry key="app/src/main/res/layout/ver_registros_card_layout.xml" value="0.24479166666666666" />
       </map>
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

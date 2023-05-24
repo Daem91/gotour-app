@@ -43,28 +43,16 @@
                 android:layout_marginStart="16dp"
                 tools:text="Fecha Fin" />
 
-
-
-
         </LinearLayout>
-
-
 
     </LinearLayout>
     <Button
         android:id="@+id/btnVer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
         android:text="Ver"
+        android:textAlignment="center"
         android:textAllCaps="false" />
-
-
-
-
-
-
 
 
 </LinearLayout>

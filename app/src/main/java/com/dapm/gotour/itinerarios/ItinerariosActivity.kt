@@ -41,6 +41,9 @@ class ItinerariosActivity : AppCompatActivity() {
         }
 
         iniRecyclerView()
+
+        
+        
     }
 
     private fun obtenerItinerarios(): ArrayList<Itinerario> {

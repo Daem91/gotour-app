@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         with(dataBaseInitializer) {
             inicializarCiudades(dataBaseHandler)
         }
-        dataBaseInitializer.inicializarDestinos(this, dataBaseHandler, 1)
+        dataBaseInitializer.inicializarDestinos(this, dataBaseHandler, 5)
         val miBoton = findViewById<Button>(R.id.start_button)
 
         miBoton.setOnClickListener {

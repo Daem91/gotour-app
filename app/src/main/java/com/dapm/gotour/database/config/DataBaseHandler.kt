@@ -16,6 +16,7 @@ val DATABASE_NAME = "GoTout_DB"
 val COL_USERNAME = "username"
 val COL_PASS = "password"
 val TABLE_USUARIO = "Usuario"
+val TABLE_FAVORITOS = "Favoritos"
 val TABLE_CIUDAD = "Ciudad"
 val TABLE_DESTINO = "Destino"
 val TABLE_ITINERARIO = "Itinerario"
@@ -30,11 +31,13 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createUser = "CREATE TABLE Usuario(username TEXT PRIMARY KEY, password TEXT)";
+        val createFavoritos = "CREATE TABLE Favoritos(id_favorito INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, id_destino INTEGER, FOREIGN KEY(username) REFERENCES Usuario(username),FOREIGN KEY(id_destino) REFERENCES Destino(id_destino))";
         val createCity = "CREATE TABLE Ciudad(id_ciudad INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, departamento TEXT, imagen TEXT)";
         val createDestination = "CREATE TABLE Destino(id_destino INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, ubicacion TEXT, imagen TEXT, id_ciudad INTEGER, FOREIGN KEY(id_ciudad) REFERENCES Ciudad(id_ciudad))"
         val createItinerario = "CREATE TABLE Itinerario(id_itinerario INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, fecha_inicio TEXT, fecha_fin TEXT,  username TEXT, FOREIGN KEY(username) REFERENCES Usuario(username))"
         val createRegistro = "CREATE TABLE RegistroDestino(id_registro INTEGER PRIMARY KEY AUTOINCREMENT, id_destino INTEGER, id_itinerario INTEGER, fecha TEXT, FOREIGN KEY(id_destino) REFERENCES Destino(id_destino), FOREIGN KEY(id_itinerario) REFERENCES Itinerario(id_itinerario))"
         db?.execSQL(createUser)
+        db?.execSQL(createFavoritos)
         db?.execSQL(createCity)
         db?.execSQL(createDestination)
         db?.execSQL(createItinerario)
@@ -45,6 +48,7 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
 
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_USUARIO")
+        db?.execSQL("DROP TABLE IF EXISTS $TABLE_FAVORITOS")
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_CIUDAD")
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_DESTINO")
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_DESTINO")
@@ -356,7 +360,51 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         return destinosRegistrados
     }
 
+    // -----------------------
+    // | METODOS DE FAVORITOS |
+    // -----------------------
 
+
+    fun añadirFavorito(favorito: Favorito) {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put("username", favorito.username)
+        cv.put("id_destino", favorito.id_destino)
+
+        db.insert(TABLE_FAVORITOS, null, cv)
+        db.close()
+    }
+
+    fun obtenerFavoritosPorUsername(username: String): ArrayList<Destino> {
+        val destinos = ArrayList<Destino>()
+        val db = this.readableDatabase
+        val query = "SELECT Destino.* FROM Favoritos INNER JOIN Destino ON Favoritos.id_destino = Destino.id_destino WHERE Favoritos.username = ?"
+        val cursor = db.rawQuery(query, arrayOf(username))
+
+        while (cursor.moveToNext()) {
+            val id_destino = cursor.getInt(cursor.getColumnIndexOrThrow("id_destino"))
+            val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
+            val descripcion = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"))
+            val ubicacion = cursor.getString(cursor.getColumnIndexOrThrow("ubicacion"))
+            val imagen = cursor.getString(cursor.getColumnIndexOrThrow("imagen"))
+            val id_ciudad = cursor.getInt(cursor.getColumnIndexOrThrow("id_ciudad"))
+
+            destinos.add(Destino(id_destino, nombre, descripcion, ubicacion, imagen, id_ciudad))
+        }
+
+        cursor.close()
+        db.close()
+
+        return destinos
+    }
+
+    fun eliminarFavorito(favorito: Favorito) {
+        val db = this.writableDatabase
+        val whereClause = "username = ? AND id_destino = ?"
+        val whereArgs = arrayOf(favorito.username, favorito.id_destino.toString())
+        db.delete(TABLE_FAVORITOS, whereClause, whereArgs)
+        db.close()
+    }
 
 
 }

@@ -68,7 +68,15 @@
             android:layout_height="match_parent"
             android:layout_weight="0"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/add_fav_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@color/white"
+                android:padding="8dp"
+                android:layout_margin="10dp"
+                android:textSize="18sp" />
 
             <ImageButton
                 android:id="@+id/fav_button"

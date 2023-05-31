@@ -38,22 +38,26 @@ class HomeActivity : AppCompatActivity() {
         ciudadAdapter = CiudadAdapter(ciudades)
         recyclerView.adapter = ciudadAdapter
 
-        binding.barraBusqueda.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
+        binding.apply {
+            barraBusqueda.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(query: String?): Boolean {
+                    filtrarCiudades(query)
+                    return true
+                }
+
+            })
+            favoritos.setOnClickListener{
+                val intent = Intent(this.root.context, FavoritosActivity::class.java)
+                startActivity(intent)
             }
-
-            override fun onQueryTextChange(query: String?): Boolean {
-                filtrarCiudades(query)
-                return true
+            itinerarios.setOnClickListener {
+                val intent = Intent(this.root.context, ItinerariosActivity::class.java)
+                startActivity(intent)
             }
-
-        })
-
-        val btnItinerarios: Button = binding.itinerarios
-        btnItinerarios.setOnClickListener {
-            val intent = Intent(this, ItinerariosActivity::class.java)
-            startActivity(intent)
         }
     }
 

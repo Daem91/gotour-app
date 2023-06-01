@@ -23,6 +23,9 @@
             android:name=".itinerarios.VerItinerarioActivity"
             android:exported="false" />
         <activity
+            android:name=".itinerarios.EditarRegistroActivity"
+            android:exported="false" />
+        <activity
             android:name=".itinerarios.AgregarDestinoActivity"
             android:exported="false" />
         <activity

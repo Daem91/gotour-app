@@ -292,6 +292,44 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         db.insert(TABLE_REGISTRO, null, cv)
         db.close()
     }
+
+    fun editarRegistro(registro: RegistroDestino) {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put("id_destino", registro.id_destino)
+        cv.put("id_itinerario", registro.id_itinerario)
+        cv.put("fecha", registro.fecha)
+
+        db.update(TABLE_REGISTRO, cv, "id_registro = ?", arrayOf(registro.id_registro.toString()))
+        db.close()
+    }
+
+    fun eliminarRegistro(idRegistro: Int) {
+        val db = this.writableDatabase
+        db.delete(TABLE_REGISTRO, "id_registro = ?", arrayOf(idRegistro.toString()))
+        db.close()
+    }
+
+    fun buscarRegistroPorId(idRegistro: Int): RegistroDestino? {
+        val db = this.readableDatabase
+        val query = "SELECT * FROM $TABLE_REGISTRO WHERE id_registro = ?"
+        val selectionArgs = arrayOf(idRegistro.toString())
+        val cursor = db.rawQuery(query, selectionArgs)
+
+        var registro: RegistroDestino? = null
+
+        if (cursor.moveToFirst()) {
+            val idDestino = cursor.getInt(cursor.getColumnIndexOrThrow("id_destino"))
+            val idItinerario = cursor.getInt(cursor.getColumnIndexOrThrow("id_itinerario"))
+            val fecha = cursor.getString(cursor.getColumnIndexOrThrow("fecha"))
+            registro = RegistroDestino(idRegistro, idDestino, idItinerario, fecha)
+        }
+
+        cursor.close()
+        db.close()
+
+        return registro
+    }
     /*
     fun obtenerDestinosPorRegistro():ArrayList<RegistroDestino>{
         val registros = ArrayList<RegistroDestino>()
@@ -339,19 +377,20 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         return nombresDestino
     }
 
-    fun obtenerDestinosRegistradosPorItinerario(idItinerario: Int): List<Pair<String, String>> {
-        val destinosRegistrados = mutableListOf<Pair<String, String>>()
+    fun obtenerDestinosRegistradosPorItinerario(idItinerario: Int): List<Triple<Int, String, String>> {
+        val destinosRegistrados = mutableListOf<Triple<Int, String, String>>()
         val db = this.readableDatabase
-        val query = "SELECT d.nombre, r.fecha FROM Destino d " +
+        val query = "SELECT r.id_registro, d.nombre, r.fecha FROM Destino d " +
                 "INNER JOIN RegistroDestino r ON d.id_destino = r.id_destino " +
                 "WHERE r.id_itinerario = ?"
         val selectionArgs = arrayOf(idItinerario.toString())
         val cursor = db.rawQuery(query, selectionArgs)
 
         while (cursor.moveToNext()) {
+            val idRegistro = cursor.getInt(cursor.getColumnIndexOrThrow("id_registro"))
             val nombreDestino = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
             val fecha = cursor.getString(cursor.getColumnIndexOrThrow("fecha"))
-            val destinoRegistrado = Pair(nombreDestino, fecha)
+            val destinoRegistrado = Triple(idRegistro, nombreDestino, fecha)
             destinosRegistrados.add(destinoRegistrado)
         }
 

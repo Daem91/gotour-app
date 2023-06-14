@@ -46,13 +46,45 @@
         </LinearLayout>
 
     </LinearLayout>
-    <Button
-        android:id="@+id/btnVer"
+
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ver"
-        android:textAlignment="center"
-        android:textAllCaps="false" />
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/btnVer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_remove_red_eye_24"
+            android:padding="5dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/btn_bg"
+            android:textAlignment="center"
+            android:textAllCaps="false" />
+        <ImageButton
+            android:id="@+id/btnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/edit_pen"
+            android:padding="5dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/btn_bg"
+            android:textAlignment="center"
+            android:textAllCaps="false" />
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_delete_24"
+            android:padding="5dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/btn_bg"
+            android:textAlignment="center"
+            android:textAllCaps="false" />
+    </LinearLayout>
 
 
 </LinearLayout>

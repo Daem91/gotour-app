@@ -4,10 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/btn_bg.xml" value="0.199" />
+        <entry key="app/src/main/res/drawable/calendar.xml" value="0.192" />
+        <entry key="app/src/main/res/drawable/ic_baseline_remove_red_eye_24.xml" value="0.192" />
         <entry key="app/src/main/res/drawable/round_button.xml" value="0.199" />
         <entry key="app/src/main/res/layout/activity_agregar_destino.xml" value="0.2767210144927536" />
         <entry key="app/src/main/res/layout/activity_create_itinerary.xml" value="0.22552083333333334" />
         <entry key="app/src/main/res/layout/activity_detalle.xml" value="0.2767210144927536" />
+        <entry key="app/src/main/res/layout/activity_editar_itinerario.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_editar_registro.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.21875" />
         <entry key="app/src/main/res/layout/activity_itinerario_create.xml" value="0.2520833333333333" />
         <entry key="app/src/main/res/layout/activity_itinerario_new.xml" value="0.10916919959473151" />
@@ -24,7 +28,7 @@
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="jbr-11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="jbr-11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

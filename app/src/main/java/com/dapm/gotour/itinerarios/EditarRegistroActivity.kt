@@ -44,7 +44,13 @@ class EditarRegistroActivity : AppCompatActivity() {
         nameDestino.text = namee
         val registro = dbHandler.buscarRegistroPorId(idRegistro)!!
 
+
         etFecha= findViewById(R.id.etFecha)
+
+        val Fecha = intent.getStringExtra("fecha")
+
+
+        etFecha.setText(Fecha)
         etFecha.setOnClickListener { showDatePickerDialogInicio() }
 
         binding.apply {

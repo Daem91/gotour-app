@@ -276,6 +276,57 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         return itinerarios
 
     }
+    fun obtenerItinerarioPorId(idItinerario: Int): Itinerario? {
+        val db = this.readableDatabase
+        val query = "SELECT * FROM Itinerario WHERE id_itinerario = $idItinerario"
+
+        val cursor: Cursor?
+        var itinerario: Itinerario? = null
+
+        cursor = db.rawQuery(query, null)
+
+        if (cursor.moveToFirst()) {
+            val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
+            val fechaInicio = cursor.getString(cursor.getColumnIndexOrThrow("fecha_inicio"))
+            val fechaFin = cursor.getString(cursor.getColumnIndexOrThrow("fecha_fin"))
+            val usernameUsuario = cursor.getString(cursor.getColumnIndexOrThrow("username"))
+
+            itinerario = Itinerario(id_itinerario = idItinerario, nombre = nombre, fecha_inicio = fechaInicio, fecha_fin = fechaFin, username = usernameUsuario)
+        }
+
+        cursor.close()
+        db.close()
+
+        return itinerario
+    }
+    fun updateItinerario(itinerario: Itinerario) {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put("nombre", itinerario.nombre)
+        cv.put("fecha_inicio", itinerario.fecha_inicio)
+        cv.put("fecha_fin", itinerario.fecha_fin)
+        val whereClause = "id_itinerario = ?"
+        val whereArgs = arrayOf(itinerario.id_itinerario.toString())
+        db.update(TABLE_ITINERARIO, cv, whereClause, whereArgs)
+        db.close()
+    }
+    fun eliminarItinerarioYRegistrosPorId(idItinerario: Int) {
+        val db = this.writableDatabase
+
+        // Eliminar los registros asociados al itinerario
+        val whereClause = "id_itinerario = ?"
+        val whereArgs = arrayOf(idItinerario.toString())
+        db.delete(TABLE_REGISTRO, whereClause, whereArgs)
+
+        // Eliminar el itinerario
+        db.delete(TABLE_ITINERARIO, "id_itinerario = ?", arrayOf(idItinerario.toString()))
+
+        db.close()
+    }
+
+
+
+
 
     // ----------------------
     // | METODOS DE REGISTRO |

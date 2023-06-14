@@ -69,6 +69,7 @@ class RegistroDestinoAdapter(private var destinos: List<Triple<Int, String, Stri
                 val intent = Intent(itemView.context, EditarRegistroActivity::class.java)
                 intent.putExtra("idRegistro", destino.first)
                 intent.putExtra("nombre_destinazo",destino.second)
+                intent.putExtra("fecha",destino.third)
                 (itemView.context as Activity).startActivityForResult(intent, REQUEST_CODE_EDITAR_REGISTRO)
 
             }

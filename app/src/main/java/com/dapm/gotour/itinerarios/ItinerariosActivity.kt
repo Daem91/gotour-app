@@ -1,5 +1,6 @@
 package com.dapm.gotour.itinerarios
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -28,6 +29,10 @@ class ItinerariosActivity : AppCompatActivity() {
 
     private val username = Usuario.username
 
+    companion object {
+        private const val REQUEST_CODE_EDITAR_ITINERARIO = 1
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,11 +51,14 @@ class ItinerariosActivity : AppCompatActivity() {
 
 
 
+
     }
+
 
     private fun obtenerItinerarios(): ArrayList<Itinerario> {
         val dbHandler = DataBaseHandler(this)
         return dbHandler.obtenerItinerariosPorUsername(username)
+
     }
 
     private fun iniRecyclerView() {
@@ -63,6 +71,20 @@ class ItinerariosActivity : AppCompatActivity() {
         val itinerarios = obtenerItinerarios()
         adapter?.let {
             it.addItems(itinerarios)
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_EDITAR_ITINERARIO && resultCode == Activity.RESULT_OK) {
+            val idItinerario = data?.getIntExtra("idItinerario", -1)
+            val fechaInicio = data?.getStringExtra("fechaInicio")
+            val nombre = data?.getStringExtra("nombre")
+            val fechaFin = data?.getStringExtra("fechaFin")
+            if (idItinerario != -1 && !fechaInicio.isNullOrEmpty()&& !fechaFin.isNullOrEmpty()&& !nombre.isNullOrEmpty()) {
+                val dbHandler = DataBaseHandler(this)
+                val nuevaLista = dbHandler.obtenerItinerariosPorUsername(username)
+                adapter?.actualizarDatosItinerario(nuevaLista)
+            }
         }
     }
 

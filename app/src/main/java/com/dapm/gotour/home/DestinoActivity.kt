@@ -33,7 +33,7 @@ class DestinoActivity : AppCompatActivity() {
         binding = ActivityDestinoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // MUY IMPORTANTE NO OLVIDAAAAAAAAR
+        // MUY IMPORTANTE
         recyclerView = findViewById(R.id.destinos_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
 

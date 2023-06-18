@@ -7,9 +7,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.bumptech.glide.Glide
 import com.dapm.gotour.R
 import com.dapm.gotour.database.config.DataBaseHandler
@@ -18,6 +16,7 @@ import com.dapm.gotour.database.model.Favorito
 import com.dapm.gotour.database.model.Usuario
 
 import com.dapm.gotour.databinding.ActivityDetalleBinding
+import com.dapm.gotour.itinerarios.ActivityCreateItinerary
 import com.dapm.gotour.itinerarios.AgregarDestinoActivity
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
@@ -62,6 +61,18 @@ class DetalleActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             descripcion.justificationMode  = JUSTIFICATION_MODE_INTER_WORD
         }
+
+
+        val btnVerDestinoMapa: LinearLayout = binding.verMapaContainer
+
+        btnVerDestinoMapa.setOnClickListener {
+            val intent = Intent(this, VerDestinoMapa::class.java)
+            intent.putExtra("latitud", destino.latitud)
+            intent.putExtra("longitud", destino.longitud)
+            intent.putExtra("nombre", destino.nombre)
+            startActivity(intent)
+        }
+
 
         //Favs de Usuario
         favoritosUsuario = dataBaseHandler.obtenerFavoritosPorUsername(username)

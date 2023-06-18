@@ -40,6 +40,7 @@ class DestinoAdapter(private var destinos: List<Destino>) : RecyclerView.Adapter
                 destinoNombre.text = destino.nombre
                 ubicacion.text = destino.ubicacion
 
+
                 agregarImagen(imagenDestino, destino.imagen)
 
 

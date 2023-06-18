@@ -21,6 +21,7 @@ val TABLE_CIUDAD = "Ciudad"
 val TABLE_DESTINO = "Destino"
 val TABLE_ITINERARIO = "Itinerario"
 val TABLE_REGISTRO="RegistroDestino"
+val TABLE_RESENA = "Resena"
 
 
 val KEY_CIUDAD = "id_ciudad"
@@ -33,15 +34,17 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         val createUser = "CREATE TABLE Usuario(username TEXT PRIMARY KEY, password TEXT)";
         val createFavoritos = "CREATE TABLE Favoritos(id_favorito INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, id_destino INTEGER, FOREIGN KEY(username) REFERENCES Usuario(username),FOREIGN KEY(id_destino) REFERENCES Destino(id_destino))";
         val createCity = "CREATE TABLE Ciudad(id_ciudad INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, departamento TEXT, imagen TEXT)";
-        val createDestination = "CREATE TABLE Destino(id_destino INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, ubicacion TEXT, imagen TEXT, id_ciudad INTEGER, FOREIGN KEY(id_ciudad) REFERENCES Ciudad(id_ciudad))"
+        val createDestination = "CREATE TABLE Destino(id_destino INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, ubicacion TEXT, imagen TEXT, id_ciudad INTEGER, latitud TEXT, longitud TEXT, FOREIGN KEY(id_ciudad) REFERENCES Ciudad(id_ciudad))"
         val createItinerario = "CREATE TABLE Itinerario(id_itinerario INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, fecha_inicio TEXT, fecha_fin TEXT,  username TEXT, FOREIGN KEY(username) REFERENCES Usuario(username))"
         val createRegistro = "CREATE TABLE RegistroDestino(id_registro INTEGER PRIMARY KEY AUTOINCREMENT, id_destino INTEGER, id_itinerario INTEGER, fecha TEXT, FOREIGN KEY(id_destino) REFERENCES Destino(id_destino), FOREIGN KEY(id_itinerario) REFERENCES Itinerario(id_itinerario))"
+        val createResena = "CREATE TABLE Resena(id_resena INTEGER PRIMARY KEY AUTOINCREMENT, id_destino INTEGER, username TEXT, descripcion TEXT, FOREIGN KEY(id_destino) REFERENCES Destino(id_destino), FOREIGN KEY(username) REFERENCES Usuario(username))"
         db?.execSQL(createUser)
         db?.execSQL(createFavoritos)
         db?.execSQL(createCity)
         db?.execSQL(createDestination)
         db?.execSQL(createItinerario)
         db?.execSQL(createRegistro)
+        db?.execSQL(createResena)
 
     }
 
@@ -54,6 +57,7 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_DESTINO")
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_ITINERARIO")
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_REGISTRO")
+        db?.execSQL("DROP TABLE IF EXISTS $TABLE_RESENA")
 
     }
 
@@ -160,6 +164,8 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         cv.put("ubicacion", destino.ubicacion)
         cv.put("imagen", destino.imagen)
         cv.put("id_ciudad", destino.id_ciudad)
+        cv.put("latitud", destino.latitud)
+        cv.put("longitud", destino.longitud)
         db.insert(TABLE_DESTINO, null, cv)
         db.close()
     }
@@ -176,7 +182,9 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
             val descripcion = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"))
             val ubicacion = cursor.getString(cursor.getColumnIndexOrThrow("ubicacion"))
             val imagen = cursor.getString(cursor.getColumnIndexOrThrow("imagen"))
-            destinos.add(Destino(id_destino, nombre, descripcion, ubicacion, imagen, idCiudad))
+            val latitud = cursor.getString(cursor.getColumnIndexOrThrow("latitud"))
+            val longitud = cursor.getString(cursor.getColumnIndexOrThrow("longitud"))
+            destinos.add(Destino(id_destino, nombre, descripcion, ubicacion, imagen, idCiudad,latitud,longitud))
         }
         cursor.close()
         db.close()
@@ -196,13 +204,32 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
             val ubicacion = cursor.getString(cursor.getColumnIndexOrThrow("ubicacion"))
             val imagen = cursor.getString(cursor.getColumnIndexOrThrow("imagen"))
             val id_ciudad = cursor.getInt(cursor.getColumnIndexOrThrow("id_ciudad"))
+            val latitud = cursor.getString(cursor.getColumnIndexOrThrow("latitud"))
+            val longitud = cursor.getString(cursor.getColumnIndexOrThrow("longitud"))
 
-            destino = Destino(id_destino, nombre, descripcion, ubicacion, imagen, id_ciudad)
+            destino = Destino(id_destino, nombre, descripcion, ubicacion, imagen, id_ciudad,latitud,longitud)
         }
         cursor.close()
 
         return destino
     }
+    fun obtenerLatitudLongitudPorIdDestino(idDestino: Int): Pair<String, String>? {
+        val db = this.readableDatabase
+        val query = "SELECT latitud, longitud FROM Destino WHERE id_destino = ?"
+        val cursor = db.rawQuery(query, arrayOf(idDestino.toString()))
+
+        var latitudLongitud: Pair<String, String>? = null
+        if (cursor.moveToFirst()) {
+            val latitud = cursor.getString(cursor.getColumnIndexOrThrow("latitud"))
+            val longitud = cursor.getString(cursor.getColumnIndexOrThrow("longitud"))
+            latitudLongitud = Pair(latitud, longitud)
+        }
+        cursor.close()
+        db.close()
+
+        return latitudLongitud
+    }
+
 
     // ----------------------
     // | METODOS DE ITINERARIO |
@@ -478,8 +505,10 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
             val ubicacion = cursor.getString(cursor.getColumnIndexOrThrow("ubicacion"))
             val imagen = cursor.getString(cursor.getColumnIndexOrThrow("imagen"))
             val id_ciudad = cursor.getInt(cursor.getColumnIndexOrThrow("id_ciudad"))
+            val latitud = cursor.getString(cursor.getColumnIndexOrThrow("latitud"))
+            val longitud = cursor.getString(cursor.getColumnIndexOrThrow("longitud"))
 
-            destinos.add(Destino(id_destino, nombre, descripcion, ubicacion, imagen, id_ciudad))
+            destinos.add(Destino(id_destino, nombre, descripcion, ubicacion, imagen, id_ciudad, latitud,longitud))
         }
 
         cursor.close()
@@ -495,6 +524,50 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         db.delete(TABLE_FAVORITOS, whereClause, whereArgs)
         db.close()
     }
+    // -----------------------
+    // | METODOS DE RESENA\ |
+    //
+
+    fun crearResena(resena: Resena) {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put("descripcion", resena.descripcion)
+        cv.put("fecha", resena.fecha)
+        cv.put("id_destino", resena.id_destino)
+        cv.put("username", resena.username)
+        db.insert(TABLE_RESENA, null, cv)
+        db.close()
+    }
+
+
+    fun obtenerResenas(): ArrayList<Resena> {
+        val resenas = ArrayList<Resena>()
+        val db = this.readableDatabase
+        val query = "SELECT * FROM Resena"
+
+        val cursor: Cursor?
+
+        cursor = db.rawQuery(query, null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                val idResena = cursor.getInt(cursor.getColumnIndexOrThrow("id_resena"))
+                val descripcion = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"))
+                val fecha = cursor.getString(cursor.getColumnIndexOrThrow("fecha"))
+                val idDestino = cursor.getInt(cursor.getColumnIndexOrThrow("id_destino"))
+                val username = cursor.getString(cursor.getColumnIndexOrThrow("username"))
+
+                val resena = Resena(id_resena=idResena, descripcion = descripcion, fecha = fecha, id_destino = idDestino, username = username)
+                resenas.add(resena)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+
+        return resenas
+    }
+
 
 
 }

@@ -1,6 +1,7 @@
 package com.dapm.gotour.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.text.LineBreaker.JUSTIFICATION_MODE_INTER_WORD
 import android.os.Build
@@ -18,6 +19,8 @@ import com.dapm.gotour.database.model.Usuario
 import com.dapm.gotour.databinding.ActivityDetalleBinding
 import com.dapm.gotour.itinerarios.ActivityCreateItinerary
 import com.dapm.gotour.itinerarios.AgregarDestinoActivity
+import com.dapm.gotour.itinerarios.ItinerariosActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 private val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
@@ -33,12 +36,47 @@ class DetalleActivity : AppCompatActivity() {
     private val username = Usuario.username
 
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detalle)
-
         binding = ActivityDetalleBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNav)
+        bottomNavigationView.setOnItemSelectedListener { menuItem ->
+
+            menuItem.isChecked = true
+
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                    true
+                }
+                R.id.itinerarios -> {
+                    val intent = Intent(this, ItinerariosActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                    true
+                }
+                R.id.favoritos -> {
+                    val intent = Intent(this, FavoritosActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
+
+
 
         dataBaseHandler = DataBaseHandler(this)
 

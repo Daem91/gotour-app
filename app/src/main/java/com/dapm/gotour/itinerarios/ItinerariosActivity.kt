@@ -16,6 +16,9 @@ import com.dapm.gotour.database.model.Usuario
 import com.dapm.gotour.databinding.ActivityHomeBinding
 
 import com.dapm.gotour.databinding.ActivityItinerariosBinding
+import com.dapm.gotour.home.FavoritosActivity
+import com.dapm.gotour.home.HomeActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ItinerariosActivity : AppCompatActivity() {
@@ -39,6 +42,41 @@ class ItinerariosActivity : AppCompatActivity() {
         binding = ActivityItinerariosBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNav)
+        bottomNavigationView.selectedItemId = R.id.itinerarios
+        bottomNavigationView.setOnItemSelectedListener { menuItem ->
+
+            menuItem.isChecked = true
+
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                    true
+                }
+                R.id.itinerarios -> {
+                    val intent = Intent(this, ItinerariosActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                    true
+                }
+                R.id.favoritos -> {
+                    val intent = Intent(this, FavoritosActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
 
         val btnCrearItinerario: Button = binding.btnCrearItinerario
         btnCrearItinerario.setOnClickListener {

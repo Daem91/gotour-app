@@ -1,6 +1,8 @@
 package com.dapm.gotour.home
 
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.SearchView
@@ -15,6 +17,8 @@ import com.dapm.gotour.database.model.Ciudad
 import com.dapm.gotour.database.model.Destino
 import com.dapm.gotour.database.model.DestinoAdapter
 import com.dapm.gotour.databinding.ActivityDestinoBinding
+import com.dapm.gotour.itinerarios.ItinerariosActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -26,12 +30,47 @@ class DestinoActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var destinoAdapter: DestinoAdapter
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destino)
 
         binding = ActivityDestinoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNav)
+        bottomNavigationView.setOnItemSelectedListener { menuItem ->
+
+            menuItem.isChecked = true
+
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                    true
+                }
+                R.id.itinerarios -> {
+                    val intent = Intent(this, ItinerariosActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                    true
+                }
+                R.id.favoritos -> {
+                    val intent = Intent(this, FavoritosActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
 
         // MUY IMPORTANTE
         recyclerView = findViewById(R.id.destinos_recycler_view)

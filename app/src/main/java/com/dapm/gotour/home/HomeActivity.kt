@@ -83,14 +83,6 @@ class HomeActivity : AppCompatActivity() {
                 }
 
             })
-            favoritos.setOnClickListener{
-                val intent = Intent(this.root.context, FavoritosActivity::class.java)
-                startActivity(intent)
-            }
-            itinerarios.setOnClickListener {
-                val intent = Intent(this.root.context, ItinerariosActivity::class.java)
-                startActivity(intent)
-            }
         }
     }
 

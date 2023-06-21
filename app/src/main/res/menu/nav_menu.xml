@@ -12,8 +12,5 @@
         android:id="@+id/favoritos"
         android:icon="@drawable/favorite_icon"
         android:title="Favoritos" />
-    <item
-        android:id="@+id/mapa"
-        android:icon="@drawable/map_icon"
-        android:title="Mapa" />
+
 </menu>

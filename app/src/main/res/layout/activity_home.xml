@@ -19,34 +19,10 @@
             android:layout_marginHorizontal="16dp"
             android:background="@drawable/searchbar_background"
             android:layout_marginTop="20dp"
-
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="40dp"
             android:queryBackground="@android:color/transparent"
             android:layout_height="wrap_content"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/favoritos"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:text="Favoritos" />
-            <Space
-                android:layout_width="20dp"
-                android:layout_height="match_parent"/>
-
-            <Button
-                android:id="@+id/itinerarios"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:text="Itinerarios"/>
-
-        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ciudades_recycler_view"

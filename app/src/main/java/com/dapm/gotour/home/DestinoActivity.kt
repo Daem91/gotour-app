@@ -82,6 +82,7 @@ class DestinoActivity : AppCompatActivity() {
         ciudad = dataBaseHandler.obtenerCiudadPorId(id_ciudad)!!
 
         val destinos = dataBaseHandler.obtenerDestinos(id_ciudad)
+        println(destinos)
         val myTextView = findViewById<TextView>(R.id.destino_ciudad)
         myTextView.text = "Lugares Turísticos de: " + ciudad.nombre
 

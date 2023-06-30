@@ -7,6 +7,7 @@ class Destino {
     var descripcion: String = ""
     var ubicacion: String = ""
     var imagen: String = ""
+    var tags: ArrayList<String> = ArrayList()
     var id_ciudad: Int = 0
     var latitud: String = ""
     var longitud: String = ""
@@ -17,6 +18,7 @@ class Destino {
         descripcion: String,
         ubicacion: String,
         imagen: String,
+        tags: ArrayList<String>,
         id_ciudad: Int,
         latitud: String,
         longitud: String
@@ -26,6 +28,7 @@ class Destino {
         this.descripcion = descripcion
         this.ubicacion = ubicacion
         this.imagen = imagen
+        this.tags = tags
         this.id_ciudad = id_ciudad
         this.latitud = latitud
         this.longitud = longitud

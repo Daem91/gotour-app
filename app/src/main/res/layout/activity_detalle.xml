@@ -121,7 +121,13 @@
 
         </LinearLayout>
 
-
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/tags_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:flexWrap="wrap"
+            app:alignContent="flex_start" />
         <TextView
             android:id="@+id/descripcion"
             android:layout_width="match_parent"
@@ -129,6 +135,7 @@
             android:layout_marginTop="16dp"
             android:text="Descripcion"
             android:textSize="15sp" />
+
 
     </LinearLayout>
 

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.dapm.gotour.R
 import com.dapm.gotour.database.config.DataBaseHandler
@@ -17,9 +18,9 @@ import com.dapm.gotour.database.model.Favorito
 import com.dapm.gotour.database.model.Usuario
 
 import com.dapm.gotour.databinding.ActivityDetalleBinding
-import com.dapm.gotour.itinerarios.ActivityCreateItinerary
 import com.dapm.gotour.itinerarios.AgregarDestinoActivity
 import com.dapm.gotour.itinerarios.ItinerariosActivity
+import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
@@ -98,6 +99,27 @@ class DetalleActivity : AppCompatActivity() {
         descripcion.text = destino.descripcion
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             descripcion.justificationMode  = JUSTIFICATION_MODE_INTER_WORD
+        }
+
+        val tagsContainer = findViewById<FlexboxLayout>(R.id.tags_container)
+        val tags = destino.tags
+
+        for (tag in tags){
+            val tagTextView = TextView(this)
+            tagTextView.text = tag
+            tagTextView.setPadding(16,8,16,8)
+            tagTextView.setBackgroundResource(R.drawable.tag_background)
+            val color = ContextCompat.getColor(this, R.color.orange)
+            tagTextView.setTextColor(color)
+
+            val layoutParams = FlexboxLayout.LayoutParams(
+                FlexboxLayout.LayoutParams.WRAP_CONTENT,
+                FlexboxLayout.LayoutParams.WRAP_CONTENT
+            )
+            layoutParams.setMargins(8, 8, 8, 8)
+            tagTextView.layoutParams = layoutParams
+
+            tagsContainer.addView(tagTextView)
         }
 
 

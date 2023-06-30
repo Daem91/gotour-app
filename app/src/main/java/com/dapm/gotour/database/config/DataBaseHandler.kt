@@ -7,6 +7,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.preference.PreferenceManager
+import android.util.Log
 import android.widget.Toast
 import com.dapm.gotour.database.model.*
 import java.lang.Exception
@@ -34,7 +35,7 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         val createUser = "CREATE TABLE Usuario(username TEXT PRIMARY KEY, password TEXT)";
         val createFavoritos = "CREATE TABLE Favoritos(id_favorito INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, id_destino INTEGER, FOREIGN KEY(username) REFERENCES Usuario(username),FOREIGN KEY(id_destino) REFERENCES Destino(id_destino))";
         val createCity = "CREATE TABLE Ciudad(id_ciudad INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, departamento TEXT, imagen TEXT)";
-        val createDestination = "CREATE TABLE Destino(id_destino INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, ubicacion TEXT, imagen TEXT, id_ciudad INTEGER, latitud TEXT, longitud TEXT, FOREIGN KEY(id_ciudad) REFERENCES Ciudad(id_ciudad))"
+        val createDestination = "CREATE TABLE Destino(id_destino INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, ubicacion TEXT, imagen TEXT, tags TEXT, id_ciudad INTEGER, latitud TEXT, longitud TEXT, FOREIGN KEY(id_ciudad) REFERENCES Ciudad(id_ciudad))"
         val createItinerario = "CREATE TABLE Itinerario(id_itinerario INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, fecha_inicio TEXT, fecha_fin TEXT,  username TEXT, FOREIGN KEY(username) REFERENCES Usuario(username))"
         val createRegistro = "CREATE TABLE RegistroDestino(id_registro INTEGER PRIMARY KEY AUTOINCREMENT, id_destino INTEGER, id_itinerario INTEGER, fecha TEXT, FOREIGN KEY(id_destino) REFERENCES Destino(id_destino), FOREIGN KEY(id_itinerario) REFERENCES Itinerario(id_itinerario))"
         val createResena = "CREATE TABLE Resena(id_resena INTEGER PRIMARY KEY AUTOINCREMENT, id_destino INTEGER, username TEXT, descripcion TEXT, FOREIGN KEY(id_destino) REFERENCES Destino(id_destino), FOREIGN KEY(username) REFERENCES Usuario(username))"
@@ -163,6 +164,7 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         cv.put("descripcion", destino.descripcion)
         cv.put("ubicacion", destino.ubicacion)
         cv.put("imagen", destino.imagen)
+        cv.put("tags",destino.tags.joinToString(","))
         cv.put("id_ciudad", destino.id_ciudad)
         cv.put("latitud", destino.latitud)
         cv.put("longitud", destino.longitud)
@@ -170,6 +172,29 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         db.close()
     }
 
+    fun obtenerTodosLosDestinos(): List<Destino>{
+        val destinos = mutableListOf<Destino>()
+        val db = this.readableDatabase
+        val query = "SELECT * FROM Destino"
+        val cursor = db.rawQuery(query, null)
+        while (cursor.moveToNext()) {
+            val id_destino = cursor.getInt(cursor.getColumnIndexOrThrow("id_destino"))
+            val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
+            val descripcion = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"))
+            val ubicacion = cursor.getString(cursor.getColumnIndexOrThrow("ubicacion"))
+            val imagen = cursor.getString(cursor.getColumnIndexOrThrow("imagen"))
+            val tagsString = cursor.getString(cursor.getColumnIndexOrThrow("tags"))
+            val tags = tagsString.split(",") as ArrayList<String>
+            val id_ciudad = cursor.getInt(cursor.getColumnIndexOrThrow("id_ciudad"))
+            val latitud = cursor.getString(cursor.getColumnIndexOrThrow("latitud"))
+            val longitud = cursor.getString(cursor.getColumnIndexOrThrow("longitud"))
+            destinos.add(Destino(id_destino, nombre, descripcion, ubicacion, imagen, tags, id_ciudad,latitud,longitud))
+        }
+        cursor.close()
+        db.close()
+        return destinos
+
+    }
     fun obtenerDestinos(idCiudad: Int): List<Destino> {
         val destinos = mutableListOf<Destino>()
         val db = this.readableDatabase
@@ -182,9 +207,11 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
             val descripcion = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"))
             val ubicacion = cursor.getString(cursor.getColumnIndexOrThrow("ubicacion"))
             val imagen = cursor.getString(cursor.getColumnIndexOrThrow("imagen"))
+            val tagsString = cursor.getString(cursor.getColumnIndexOrThrow("tags"))
+            val tags = tagsString.split(",") as ArrayList<String>
             val latitud = cursor.getString(cursor.getColumnIndexOrThrow("latitud"))
             val longitud = cursor.getString(cursor.getColumnIndexOrThrow("longitud"))
-            destinos.add(Destino(id_destino, nombre, descripcion, ubicacion, imagen, idCiudad,latitud,longitud))
+            destinos.add(Destino(id_destino, nombre, descripcion, ubicacion, imagen, tags, idCiudad,latitud,longitud))
         }
         cursor.close()
         db.close()
@@ -203,11 +230,13 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
             val descripcion = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"))
             val ubicacion = cursor.getString(cursor.getColumnIndexOrThrow("ubicacion"))
             val imagen = cursor.getString(cursor.getColumnIndexOrThrow("imagen"))
+            val tagsString = cursor.getString(cursor.getColumnIndexOrThrow("tags"))
+            val tags = tagsString.split(",") as ArrayList<String>
             val id_ciudad = cursor.getInt(cursor.getColumnIndexOrThrow("id_ciudad"))
             val latitud = cursor.getString(cursor.getColumnIndexOrThrow("latitud"))
             val longitud = cursor.getString(cursor.getColumnIndexOrThrow("longitud"))
 
-            destino = Destino(id_destino, nombre, descripcion, ubicacion, imagen, id_ciudad,latitud,longitud)
+            destino = Destino(id_destino, nombre, descripcion, ubicacion, imagen, tags, id_ciudad,latitud,longitud)
         }
         cursor.close()
 
@@ -504,11 +533,13 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
             val descripcion = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"))
             val ubicacion = cursor.getString(cursor.getColumnIndexOrThrow("ubicacion"))
             val imagen = cursor.getString(cursor.getColumnIndexOrThrow("imagen"))
+            val tagsString = cursor.getString(cursor.getColumnIndexOrThrow("tags"))
+            val tags = tagsString.split(",") as ArrayList<String>
             val id_ciudad = cursor.getInt(cursor.getColumnIndexOrThrow("id_ciudad"))
             val latitud = cursor.getString(cursor.getColumnIndexOrThrow("latitud"))
             val longitud = cursor.getString(cursor.getColumnIndexOrThrow("longitud"))
 
-            destinos.add(Destino(id_destino, nombre, descripcion, ubicacion, imagen, id_ciudad, latitud,longitud))
+            destinos.add(Destino(id_destino, nombre, descripcion, ubicacion, imagen, tags, id_ciudad, latitud,longitud))
         }
 
         cursor.close()

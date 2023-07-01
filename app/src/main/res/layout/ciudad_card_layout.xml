@@ -9,57 +9,103 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
-        app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:cardUseCompatPadding="true"
-        app:contentPadding="16dp">
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp">
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_marginRight="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/imagen_ciudad"
-                    android:layout_width="90dp"
-                    android:layout_height="45dp"
-                    android:scaleType="centerCrop"
-                    />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:orientation="vertical"
+            <ImageView
+                android:id="@+id/imagen_ciudad"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <TextView
-                    android:id="@+id/ciudad_nombre"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Nombre de Ciudad"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@drawable/degradado_background"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:gravity="bottom">
                 <TextView
                     android:id="@+id/departamento_nombre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Nombre de Departamento"
-
-                    android:textSize="13sp" />
+                    android:textColor="@color/white"
+                    android:textSize="15dp"/>
+                <TextView
+                    android:id="@+id/ciudad_nombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre de Ciudad"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    android:textStyle="bold"/>
             </LinearLayout>
-
-        </LinearLayout>
-
-
-
+        </FrameLayout>
 
     </androidx.cardview.widget.CardView>
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/card_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="90dp"-->
+<!--        app:cardBackgroundColor="@android:color/white"-->
+<!--        app:cardCornerRadius="8dp"-->
+<!--        app:cardElevation="4dp"-->
+<!--        app:cardUseCompatPadding="true"-->
+<!--        app:contentPadding="16dp">-->
+
+<!--        <LinearLayout-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_marginRight="16dp"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content">-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/imagen_ciudad"-->
+<!--                    android:layout_width="90dp"-->
+<!--                    android:layout_height="45dp"-->
+<!--                    android:scaleType="centerCrop"-->
+<!--                    />-->
+<!--            </LinearLayout>-->
+
+
+<!--            <LinearLayout-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
+<!--                <TextView-->
+<!--                    android:id="@+id/ciudad_nombre"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Nombre de Ciudad"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textStyle="bold"/>-->
+<!--                <TextView-->
+<!--                    android:id="@+id/departamento_nombre"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Nombre de Departamento"-->
+
+<!--                    android:textSize="13sp" />-->
+<!--            </LinearLayout>-->
+
+<!--        </LinearLayout>-->
+
+
+
+
+<!--    </androidx.cardview.widget.CardView>-->
 
 </LinearLayout>

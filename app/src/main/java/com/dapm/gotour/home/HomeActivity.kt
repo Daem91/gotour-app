@@ -3,7 +3,9 @@ package com.dapm.gotour.home
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.*
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dapm.gotour.R
@@ -71,7 +73,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         recyclerView = binding.ciudadesRecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = GridLayoutManager(this,2)
 
         val dataBaseHandler = DataBaseHandler(this)
         val ciudades = dataBaseHandler.listarCiudades()
@@ -107,10 +109,11 @@ class HomeActivity : AppCompatActivity() {
             }
 
             if (listaFiltrada.isEmpty()) {
-                Toast.makeText(this, "No se encontraron datos", Toast.LENGTH_SHORT).show()
+                binding.resultadosVisibilidad.visibility = View.VISIBLE
             } else {
-                ciudadAdapter.setListaFiltrada(listaFiltrada)
+                binding.resultadosVisibilidad.visibility = View.GONE
             }
+            ciudadAdapter.setListaFiltrada(listaFiltrada)
         }
     }
 }

@@ -9,6 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="70dp"
         android:layout_height="match_parent">
 
         <SearchView
@@ -16,7 +18,6 @@
             android:id="@+id/barra_busqueda"
             android:iconifiedByDefault="false"
             android:queryHint="Buscar una ciudad"
-            android:layout_marginHorizontal="16dp"
             android:background="@drawable/searchbar_background"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
@@ -26,25 +27,62 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
+            android:textColor="@color/black"
             android:text="¡Bienvenido/a!"
             android:textSize="30sp"
             android:textStyle="bold"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
+            android:textColor="@color/black"
             android:text="Descubre nuestras ciudades"
             android:textSize="25sp"
-            android:textStyle="bold"
             android:layout_marginBottom="20dp"/>
-
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ciudades_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/resultados_visibilidad"
+            android:paddingVertical="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No se encontraron resultados."
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="italic"
+            android:textColor="@color/black"
+            android:visibility="gone"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/orange"
+            android:text="Ciudades Tendencia"
+            android:textSize="25sp"
+            android:layout_marginVertical="20dp"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/degradado_background"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Proximamente"
+                android:textColor="@color/orange"
+                android:textSize="30dp"
+                android:textStyle="bold"/>
+
+        </FrameLayout>
+
 
     </LinearLayout>
 

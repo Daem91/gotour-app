@@ -52,6 +52,14 @@ class DestinoActivity : AppCompatActivity() {
                     finish()
                     true
                 }
+                R.id.search -> {
+                    val intent = Intent(this, SearchActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                    true
+                }
                 R.id.itinerarios -> {
                     val intent = Intent(this, ItinerariosActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -84,7 +92,7 @@ class DestinoActivity : AppCompatActivity() {
         val destinos = dataBaseHandler.obtenerDestinos(id_ciudad)
         println(destinos)
         val myTextView = findViewById<TextView>(R.id.destino_ciudad)
-        myTextView.text = "Lugares Turísticos de: " + ciudad.nombre
+        myTextView.text = ciudad.nombre
 
         destinoAdapter = DestinoAdapter(destinos)
         recyclerView.adapter = destinoAdapter

@@ -3,15 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".home.DestinoActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/header_destinos"
+        android:background="@drawable/header_background"
         android:orientation="vertical"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="20dp"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/location"/>
+            <TextView
+                android:id="@+id/destino_ciudad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ciudad"
+                android:textSize="25sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
+        </LinearLayout>
 
         <SearchView
             android:layout_width="match_parent"
@@ -20,20 +43,28 @@
             android:queryHint="Buscar un destino"
             android:layout_marginHorizontal="16dp"
             android:background="@drawable/searchbar_background"
-            android:layout_marginTop="20dp"
             android:layout_marginBottom="16dp"
             android:queryBackground="@android:color/transparent"
             android:layout_height="wrap_content"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/header_destinos"
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
         <TextView
             android:padding="12dp"
-            android:id="@+id/destino_ciudad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nombre de Ciudad"
+            android:text="Destinos"
             android:textSize="24sp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="10dp"
+            android:textColor="@color/orange"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView

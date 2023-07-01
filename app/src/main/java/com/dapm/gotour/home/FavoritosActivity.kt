@@ -42,6 +42,14 @@ class FavoritosActivity : AppCompatActivity() {
                     true
 
                 }
+                R.id.search -> {
+                    val intent = Intent(this, SearchActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                    true
+                }
                 R.id.itinerarios -> {
                     val intent = Intent(this, ItinerariosActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

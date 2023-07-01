@@ -5,6 +5,10 @@
         android:icon="@drawable/home_icon"
         android:title="Inicio" />
     <item
+        android:id="@+id/search"
+        android:icon="@drawable/search_icon"
+        android:title="Buscar" />
+    <item
         android:id="@+id/itinerarios"
         android:icon="@drawable/itinerario_icon"
         android:title="Itinerarios" />

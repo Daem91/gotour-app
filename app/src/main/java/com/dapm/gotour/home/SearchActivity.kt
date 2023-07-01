@@ -3,32 +3,28 @@ package com.dapm.gotour.home
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.*
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dapm.gotour.R
-import com.dapm.gotour.database.config.DataBaseHandler
-import com.dapm.gotour.database.model.Ciudad
-import com.dapm.gotour.database.model.CiudadAdapter
-import com.dapm.gotour.databinding.ActivityHomeBinding
+import com.dapm.gotour.database.model.DestinoAdapter
+import com.dapm.gotour.databinding.ActivitySearchBinding
 import com.dapm.gotour.itinerarios.ItinerariosActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.util.*
-import kotlin.collections.ArrayList
-class HomeActivity : AppCompatActivity() {
 
+class SearchActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySearchBinding
     private lateinit var recyclerView: RecyclerView
-    private lateinit var ciudadAdapter: CiudadAdapter
-    private lateinit var binding: ActivityHomeBinding
-
+    private lateinit var destinoAdapter: DestinoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(R.layout.activity_search)
+
+        binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottomNavigationView.selectedItemId = R.id.home
+        bottomNavigationView.selectedItemId = R.id.search
         bottomNavigationView.setOnItemSelectedListener { menuItem ->
 
             menuItem.isChecked = true
@@ -68,49 +64,9 @@ class HomeActivity : AppCompatActivity() {
                 }
                 else -> false
             }
+
+
         }
 
-        recyclerView = binding.ciudadesRecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        val dataBaseHandler = DataBaseHandler(this)
-        val ciudades = dataBaseHandler.listarCiudades()
-
-        ciudadAdapter = CiudadAdapter(ciudades)
-        recyclerView.adapter = ciudadAdapter
-
-        binding.apply {
-            barraBusqueda.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return false
-                }
-
-                override fun onQueryTextChange(query: String?): Boolean {
-                    filtrarCiudades(query)
-                    return true
-                }
-
-            })
-        }
-    }
-
-    fun filtrarCiudades(query: String?) {
-        val dataBaseHandler = DataBaseHandler(this)
-        val ciudades = dataBaseHandler.listarCiudades()
-
-        if (query != null) {
-            val listaFiltrada = ArrayList<Ciudad>()
-            for (i in ciudades) {
-                if (i.nombre.lowercase(Locale.ROOT).contains(query)) {
-                    listaFiltrada.add(i)
-                }
-            }
-
-            if (listaFiltrada.isEmpty()) {
-                Toast.makeText(this, "No se encontraron datos", Toast.LENGTH_SHORT).show()
-            } else {
-                ciudadAdapter.setListaFiltrada(listaFiltrada)
-            }
-        }
     }
 }

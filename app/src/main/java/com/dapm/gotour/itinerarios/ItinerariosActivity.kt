@@ -18,6 +18,7 @@ import com.dapm.gotour.databinding.ActivityHomeBinding
 import com.dapm.gotour.databinding.ActivityItinerariosBinding
 import com.dapm.gotour.home.FavoritosActivity
 import com.dapm.gotour.home.HomeActivity
+import com.dapm.gotour.home.SearchActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -52,6 +53,14 @@ class ItinerariosActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.home -> {
                     val intent = Intent(this, HomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    finish()
+                    true
+                }
+                R.id.search -> {
+                    val intent = Intent(this, SearchActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     startActivity(intent)
                     overridePendingTransition(0, 0)

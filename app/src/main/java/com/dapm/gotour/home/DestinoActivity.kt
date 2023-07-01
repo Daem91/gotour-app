@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
@@ -121,14 +122,16 @@ class DestinoActivity : AppCompatActivity() {
         if (query != null) {
             val listaFiltrada = ArrayList<Destino>()
             for (i in destinos) {
-                if (i.nombre.lowercase(Locale.ROOT).contains(query)){
+                if (i.nombre.lowercase(Locale.ROOT).contains(query.lowercase(Locale.ROOT))){
                     listaFiltrada.add(i)
                 }
             }
 
             if (listaFiltrada.isEmpty()) {
-                Toast.makeText(this, "No se encontraron datos", Toast.LENGTH_SHORT).show()
+                binding.resultadosVisibilidad.visibility = View.VISIBLE
+                destinoAdapter.setListaFiltrada(listaFiltrada)
             } else {
+                binding.resultadosVisibilidad.visibility = View.GONE
                 destinoAdapter.setListaFiltrada(listaFiltrada)
             }
         }

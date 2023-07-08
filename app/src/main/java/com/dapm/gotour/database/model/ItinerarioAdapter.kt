@@ -37,11 +37,6 @@ class ItinerarioAdapter:RecyclerView.Adapter<ItinerarioAdapter.ItinerarioViewHol
 
     }
 
-
-
-
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItinerarioViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.itinerario_card_layout, parent, false)

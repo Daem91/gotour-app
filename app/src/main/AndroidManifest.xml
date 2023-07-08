@@ -19,6 +19,15 @@
         android:theme="@style/Theme.GoTour"
         tools:targetApi="31">
         <activity
+            android:name=".resenas.EditarResenaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".resenas.CrearResenaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".home.ResenasActivity"
+            android:exported="false" />
+        <activity
             android:name=".home.SearchActivity"
             android:exported="false" />
 

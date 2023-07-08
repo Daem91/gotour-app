@@ -57,7 +57,8 @@ class EditarRegistroActivity : AppCompatActivity() {
 
             aceptarEditar.setOnClickListener {
 
-                val registroEditado = RegistroDestino(registro.id_registro, registro.id_destino, registro.id_itinerario, etFecha.text.toString())
+                val registroEditado = RegistroDestino(registro.id_registro, registro.id_destino,
+                    registro.id_itinerario, etFecha.text.toString())
                 dbHandler.editarRegistro(registroEditado)
 
                 val intent = Intent()

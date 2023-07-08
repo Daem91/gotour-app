@@ -47,8 +47,6 @@ class VerItinerarioActivity : AppCompatActivity() {
         val fechaFinal = findViewById<TextView>(R.id.fechaF)
         fechaFinal.text = fechaF
 
-
-
         val dataBaseHandler=DataBaseHandler(this)
         val destinosRegistrados = dataBaseHandler.obtenerDestinosRegistradosPorItinerario(idItinerario)
         adapter = RegistroDestinoAdapter(destinosRegistrados, idItinerario)

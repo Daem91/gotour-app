@@ -28,14 +28,10 @@ class ActivityCreateItinerary : AppCompatActivity() {
     private val calendarInicio: Calendar = Calendar.getInstance()
     private val calendarFin: Calendar = Calendar.getInstance()
 
-
-
     private lateinit var btnGuardarItinerario: Button
     private lateinit var btnCancel: Button
 
-
     private lateinit var dbHandler: DataBaseHandler
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,8 +45,6 @@ class ActivityCreateItinerary : AppCompatActivity() {
 
         etFechaFin = findViewById(R.id.etFechaFin)
         etFechaFin.setOnClickListener { showDatePickerDialogFin() }
-
-
 
         btnGuardarItinerario = findViewById(R.id.btnCrearItinerario)
         btnCancel = findViewById(R.id.btnCancelar)
@@ -71,7 +65,6 @@ class ActivityCreateItinerary : AppCompatActivity() {
         }
 
         dbHandler = DataBaseHandler(this)
-
 
     }
 

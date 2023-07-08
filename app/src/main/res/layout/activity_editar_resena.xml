@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp"
+    tools:context=".resenas.EditarResenaActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_weight="1">
+        <ImageView
+            android:id="@+id/my_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/star" />
+        <TextView
+            android:id="@+id/agregar_encabezado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textAlignment="center"
+            android:text="¿Deseas editar tu comentario acerca de este destino?"
+            android:textSize="19sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/destino_nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Nombre del destino"
+            android:textSize="17sp"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Reseña:"
+            android:textSize="15sp" />
+
+            <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:inputType="text|textMultiLine"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/cancelar_editar"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"/>
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/aceptar_editar"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Aceptar"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -24,7 +24,6 @@ val TABLE_ITINERARIO = "Itinerario"
 val TABLE_REGISTRO="RegistroDestino"
 val TABLE_RESENA = "Resena"
 
-
 val KEY_CIUDAD = "id_ciudad"
 val NAME_CIUDAD = "nombre"
 val DEPARTAMENTO_CIUDAD = "departamento"
@@ -38,7 +37,7 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         val createDestination = "CREATE TABLE Destino(id_destino INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, ubicacion TEXT, imagen TEXT, tags TEXT, id_ciudad INTEGER, latitud TEXT, longitud TEXT, FOREIGN KEY(id_ciudad) REFERENCES Ciudad(id_ciudad))"
         val createItinerario = "CREATE TABLE Itinerario(id_itinerario INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, fecha_inicio TEXT, fecha_fin TEXT,  username TEXT, FOREIGN KEY(username) REFERENCES Usuario(username))"
         val createRegistro = "CREATE TABLE RegistroDestino(id_registro INTEGER PRIMARY KEY AUTOINCREMENT, id_destino INTEGER, id_itinerario INTEGER, fecha TEXT, FOREIGN KEY(id_destino) REFERENCES Destino(id_destino), FOREIGN KEY(id_itinerario) REFERENCES Itinerario(id_itinerario))"
-        val createResena = "CREATE TABLE Resena(id_resena INTEGER PRIMARY KEY AUTOINCREMENT, id_destino INTEGER, username TEXT, descripcion TEXT, FOREIGN KEY(id_destino) REFERENCES Destino(id_destino), FOREIGN KEY(username) REFERENCES Usuario(username))"
+        val createResena = "CREATE TABLE Resena(id_resena INTEGER PRIMARY KEY AUTOINCREMENT, id_destino INTEGER, username TEXT, descripcion TEXT, fecha TEXT, FOREIGN KEY(id_destino) REFERENCES Destino(id_destino), FOREIGN KEY(username) REFERENCES Usuario(username))"
         db?.execSQL(createUser)
         db?.execSQL(createFavoritos)
         db?.execSQL(createCity)
@@ -381,9 +380,6 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
     }
 
 
-
-
-
     // ----------------------
     // | METODOS DE REGISTRO |
     // ----------------------
@@ -557,7 +553,7 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
     }
     // -----------------------
     // | METODOS DE RESENA\ |
-    //
+    // -----------------------
 
     fun crearResena(resena: Resena) {
         val db = this.writableDatabase
@@ -570,6 +566,56 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         db.close()
     }
 
+    fun modificarResena(resena: Resena) {
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put("descripcion", resena.descripcion)
+        cv.put("fecha", resena.fecha)
+        cv.put("id_destino", resena.id_destino)
+        cv.put("username", resena.username)
+
+        val whereClause = "id_resena = ?"
+        val whereArgs = arrayOf(resena.id_resena.toString())
+
+        db.update(TABLE_RESENA, cv, whereClause, whereArgs)
+        db.close()
+    }
+
+    fun eliminarResena(idResena: Int) {
+        val db = this.writableDatabase
+
+        val whereClause = "id_resena = ?"
+        val whereArgs = arrayOf(idResena.toString())
+
+        db.delete(TABLE_RESENA, whereClause, whereArgs)
+        db.close()
+    }
+
+    fun obtenerResenaPorIdResena(idResena: Int): Resena? {
+        val db = this.readableDatabase
+        val query = "SELECT * FROM Resena WHERE id_resena = ?"
+        val selectionArgs = arrayOf(idResena.toString())
+
+        val cursor: Cursor?
+
+        cursor = db.rawQuery(query, selectionArgs)
+
+        var resena: Resena? = null
+
+        if (cursor.moveToFirst()) {
+            val descripcion = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"))
+            val fecha = cursor.getString(cursor.getColumnIndexOrThrow("fecha"))
+            val idDestino = cursor.getInt(cursor.getColumnIndexOrThrow("id_destino"))
+            val username = cursor.getString(cursor.getColumnIndexOrThrow("username"))
+
+            resena = Resena(id_resena = idResena, descripcion = descripcion, fecha = fecha, id_destino = idDestino, username = username)
+        }
+
+        cursor.close()
+        db.close()
+
+        return resena
+    }
 
     fun obtenerResenas(): ArrayList<Resena> {
         val resenas = ArrayList<Resena>()
@@ -589,6 +635,34 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
                 val username = cursor.getString(cursor.getColumnIndexOrThrow("username"))
 
                 val resena = Resena(id_resena=idResena, descripcion = descripcion, fecha = fecha, id_destino = idDestino, username = username)
+                resenas.add(resena)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+
+        return resenas
+    }
+
+    fun obtenerResenasPorIdDestino(idDestino: Int): ArrayList<Resena> {
+        val resenas = ArrayList<Resena>()
+        val db = this.readableDatabase
+        val query = "SELECT * FROM Resena WHERE id_destino = ?"
+        val selectionArgs = arrayOf(idDestino.toString())
+
+        val cursor: Cursor?
+
+        cursor = db.rawQuery(query, selectionArgs)
+
+        if (cursor.moveToFirst()) {
+            do {
+                val idResena = cursor.getInt(cursor.getColumnIndexOrThrow("id_resena"))
+                val descripcion = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"))
+                val fecha = cursor.getString(cursor.getColumnIndexOrThrow("fecha"))
+                val username = cursor.getString(cursor.getColumnIndexOrThrow("username"))
+
+                val resena = Resena(id_resena = idResena, descripcion = descripcion, fecha = fecha, id_destino = idDestino, username = username)
                 resenas.add(resena)
             } while (cursor.moveToNext())
         }

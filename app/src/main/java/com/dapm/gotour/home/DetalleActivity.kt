@@ -20,6 +20,7 @@ import com.dapm.gotour.database.model.Usuario
 import com.dapm.gotour.databinding.ActivityDetalleBinding
 import com.dapm.gotour.itinerarios.AgregarDestinoActivity
 import com.dapm.gotour.itinerarios.ItinerariosActivity
+import com.dapm.gotour.resenas.CrearResenaActivity
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
@@ -165,6 +166,19 @@ class DetalleActivity : AppCompatActivity() {
             favButton.setOnClickListener{
                 val intent = Intent(this.root.context, AgregarDestinoActivity::class.java)
                 intent.putExtra("id_destino",destino.id_destino)
+                intent.putExtra("name_destino",destino.nombre)
+                startActivity(intent)
+            }
+            // Reseña
+            btnCrearResena.setOnClickListener {
+                val intent = Intent(this.root.context, CrearResenaActivity::class.java)
+                intent.putExtra("id_destino", destino.id_destino)
+                intent.putExtra("name_destino",destino.nombre)
+                startActivity(intent)
+            }
+            btnVerResenas.setOnClickListener {
+                val intent = Intent(this.root.context, ResenasActivity::class.java)
+                intent.putExtra("id_destino", destino.id_destino)
                 intent.putExtra("name_destino",destino.nombre)
                 startActivity(intent)
             }

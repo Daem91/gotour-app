@@ -1,49 +1,43 @@
-package com.dapm.gotour.itinerarios
+package com.dapm.gotour.home
 
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dapm.gotour.R
 import com.dapm.gotour.database.config.DataBaseHandler
-import com.dapm.gotour.database.model.Itinerario
-import com.dapm.gotour.database.model.ItinerarioAdapter
-import com.dapm.gotour.database.model.Usuario
-import com.dapm.gotour.databinding.ActivityHomeBinding
-
+import com.dapm.gotour.database.model.*
 import com.dapm.gotour.databinding.ActivityItinerariosBinding
-import com.dapm.gotour.home.FavoritosActivity
-import com.dapm.gotour.home.HomeActivity
-import com.dapm.gotour.home.SearchActivity
+import com.dapm.gotour.databinding.ActivityResenasBinding
+import com.dapm.gotour.itinerarios.ItinerariosActivity
+import com.dapm.gotour.resenas.EditarResenaActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class ItinerariosActivity : AppCompatActivity() {
+class ResenasActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-
-    private lateinit var binding: ActivityItinerariosBinding
-    private var adapter:ItinerarioAdapter?=null
-
-    private val username = Usuario.username
-
-    companion object {
-        private const val REQUEST_CODE_EDITAR_ITINERARIO = 1
-    }
+    private lateinit var binding: ActivityResenasBinding
+    private var adapter: ResenaAdapter?=null
+    var ideazoDestino: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityItinerariosBinding.inflate(layoutInflater)
+        binding = ActivityResenasBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
+        recyclerView = findViewById(R.id.resenas_recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val nameDestino = intent.getStringExtra("name_destino")
+        ideazoDestino = intent.getIntExtra("id_destino",-1)
+        binding.resenasTitle.text = nameDestino
+
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottomNavigationView.selectedItemId = R.id.itinerarios
+        bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.setOnItemSelectedListener { menuItem ->
 
             menuItem.isChecked = true
@@ -85,49 +79,47 @@ class ItinerariosActivity : AppCompatActivity() {
             }
         }
 
-        val btnCrearItinerario: Button = binding.btnCrearItinerario
-        btnCrearItinerario.setOnClickListener {
-            val intent = Intent(this, ActivityCreateItinerary::class.java)
-            startActivity(intent)
-            finish()
+        fun getResenas(): ArrayList<Resena> {
+            val destino = ideazoDestino
+            val dbHandler = DataBaseHandler(this)
+            return dbHandler.obtenerResenasPorIdDestino(destino)
+
         }
 
-        iniRecyclerView()
+        val resenas = getResenas()
+        if (resenas.isEmpty()) {
+            binding.resenasVisibilidad.visibility = View.VISIBLE
 
-    }
-
-    private fun obtenerItinerarios(): ArrayList<Itinerario> {
-        val dbHandler = DataBaseHandler(this)
-        return dbHandler.obtenerItinerariosPorUsername(username)
-
-    }
-
-    private fun iniRecyclerView() {
-        recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = ItinerarioAdapter()
+        } else {
+            binding.resenasVisibilidad.visibility = View.GONE
+        }
+        adapter = ResenaAdapter( resenas )
         recyclerView.adapter = adapter
-
-        // Obtener los itinerarios y actualizar el adaptador
-        val itinerarios = obtenerItinerarios()
         adapter?.let {
-            it.addItems(itinerarios)
+            it.addItems(resenas)
         }
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_EDITAR_ITINERARIO && resultCode == Activity.RESULT_OK) {
-            val idItinerario = data?.getIntExtra("idItinerario", -1)
-            val fechaInicio = data?.getStringExtra("fechaInicio")
-            val nombre = data?.getStringExtra("nombre")
-            val fechaFin = data?.getStringExtra("fechaFin")
-            if (idItinerario != -1 && !fechaInicio.isNullOrEmpty()&& !fechaFin.isNullOrEmpty()&& !nombre.isNullOrEmpty()) {
+        if (requestCode == EditarResenaActivity.REQUEST_CODE_EDITAR_RESENA && resultCode == Activity.RESULT_OK) {
+            val idResena = data?.getIntExtra("idResena", -1)
+            val idDestino = data?.getIntExtra("idDestino", -1)
+            val descripcion = data?.getStringExtra("descripcion")
+            val username = data?.getStringExtra("username")
+            val fecha = data?.getStringExtra("fecha")
+            if (idResena != -1 && idDestino != -1 && !fecha.isNullOrEmpty()&& !descripcion.isNullOrEmpty()&& !username.isNullOrEmpty()) {
                 val dbHandler = DataBaseHandler(this)
-                val nuevaLista = dbHandler.obtenerItinerariosPorUsername(username)
-                adapter?.actualizarDatosItinerario(nuevaLista)
+                val nuevaLista = dbHandler.obtenerResenasPorIdDestino(idDestino!!)
+                runOnUiThread {
+                    adapter?.actualizarDatos(nuevaLista)
+                    adapter?.notifyDataSetChanged()
+                }
             }
         }
     }
+
 
 }

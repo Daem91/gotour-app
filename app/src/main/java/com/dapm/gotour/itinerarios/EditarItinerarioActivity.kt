@@ -31,7 +31,7 @@ class EditarItinerarioActivity : AppCompatActivity() {
 
 
     companion object {
-        private const val REQUEST_CODE_EDITAR_ITINERARIO = 1
+        private const val REQUEST_CODE_EDITAR_RESENA = 1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +74,8 @@ class EditarItinerarioActivity : AppCompatActivity() {
                 val fechaFin = etFechaFin.text.toString()
                 val idItinerario = intent.getIntExtra("id_itinerario", -1)
 
-                val itinerario = Itinerario(id_itinerario = idItinerario, nombre = nombre, fecha_inicio = fechaInicio, fecha_fin = fechaFin)
+                val itinerario = Itinerario(id_itinerario = idItinerario, nombre = nombre,
+                    fecha_inicio = fechaInicio, fecha_fin = fechaFin)
 
                 dbHandler.updateItinerario(itinerario)
 

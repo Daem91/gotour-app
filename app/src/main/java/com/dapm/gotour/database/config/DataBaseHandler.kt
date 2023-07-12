@@ -485,7 +485,8 @@ class DataBaseHandler(var context: Context): SQLiteOpenHelper(context, DATABASE_
         val db = this.readableDatabase
         val query = "SELECT r.id_registro, d.nombre, r.fecha FROM Destino d " +
                 "INNER JOIN RegistroDestino r ON d.id_destino = r.id_destino " +
-                "WHERE r.id_itinerario = ?"
+                "WHERE r.id_itinerario = ?" +
+                "ORDER BY r.fecha ASC"
         val selectionArgs = arrayOf(idItinerario.toString())
         val cursor = db.rawQuery(query, selectionArgs)
 

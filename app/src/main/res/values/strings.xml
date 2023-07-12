@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">GoTour</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="compartir_itinerario">Mi itinerario: %1$s\n\nEstá compuesto por:\n\n - %2$s</string>
+
+
 </resources>

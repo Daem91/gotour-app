@@ -51,6 +51,29 @@ class VerItinerarioActivity : AppCompatActivity() {
         val destinosRegistrados = dataBaseHandler.obtenerDestinosRegistradosPorItinerario(idItinerario)
         adapter = RegistroDestinoAdapter(destinosRegistrados, idItinerario)
         recyclerView.adapter = adapter
+
+        binding.apply {
+            compartir.setOnClickListener {
+                val nombreItinerario = nameItinerario ?: ""
+
+                val dataBaseHandler = DataBaseHandler(root.context)
+                val destinosRegistrados = dataBaseHandler.obtenerDestinosRegistradosPorItinerario(idItinerario)
+
+                val destinosConFechas = destinosRegistrados.joinToString(", \n - ") { "${it.second} (${it.third})" }
+                val mensaje = getString(R.string.compartir_itinerario, nombreItinerario, destinosConFechas)
+
+                val intentItinerario = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, mensaje)
+                }
+
+                startActivity(Intent.createChooser(intentItinerario, "Compartir itinerario"))
+            }
+        }
+
+
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

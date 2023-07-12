@@ -51,7 +51,7 @@ class VerDestinoMapa : AppCompatActivity () , OnMapReadyCallback{
         mMap.addMarker(MarkerOptions().position(destinoLatLng).title(nombre))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(destinoLatLng, 15f))
 
-        // Actualizar los EditText con la latitud y longitud del destino
+
 
 
         enableLocation()

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import android.Manifest
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
@@ -34,6 +35,7 @@ import okhttp3.Dispatcher
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import kotlin.math.roundToInt
 
 class VerDestinoMapa : AppCompatActivity(), OnMapReadyCallback {
 
@@ -45,9 +47,14 @@ class VerDestinoMapa : AppCompatActivity(), OnMapReadyCallback {
 
     private var start: String = ""
     private var end: String = ""
-    var poly: Polyline?=null
-    var distancia: Double?=null
-    var tiempo: Double?=null
+    var poly: Polyline? = null
+    var poly_caminante: Polyline? = null
+    var distancia: Double? = null
+    var tiempo: Double? = null
+
+
+    var distancia_caminante: Double? = null
+    var tiempo_caminante: Double? = null
 
 
     companion object {
@@ -64,14 +71,13 @@ class VerDestinoMapa : AppCompatActivity(), OnMapReadyCallback {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         poly?.remove()
-        poly=null
-
-
+        poly = null
+        poly_caminante?.remove()
+        poly_caminante = null
 
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
-
 
 
     }
@@ -90,7 +96,7 @@ class VerDestinoMapa : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(MarkerOptions().position(destinoLatLng).title(nombre))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(destinoLatLng, 15f))
 
-        end="${longitud},${latitud}"
+        end = "${longitud},${latitud}"
 
 
 
@@ -112,7 +118,7 @@ class VerDestinoMapa : AppCompatActivity(), OnMapReadyCallback {
                     val currentLatLng = LatLng(it.latitude, it.longitude)
                     val currentLat = it.latitude
                     val currentLng = it.longitude
-                    start="${currentLng},${currentLat}"
+                    start = "${currentLng},${currentLat}"
                     createRoute()
                 }
             }
@@ -176,61 +182,88 @@ class VerDestinoMapa : AppCompatActivity(), OnMapReadyCallback {
                 start,
                 end
             )
-            val call2= getRetrofit().create(ApiService::class.java).getSummary(
+            val callwalk = getRetrofit().create(ApiService::class.java).getRouteWalking(
                 "5b3ce3597851110001cf624887ab3f427d7344ae99970f6276003169",
                 start,
                 end
             )
-            if (call.isSuccessful) {
 
-                drawRoute(call.body())
-                if (call2.isSuccessful){
-                    Log.i("ave", "que paso")
-                    showTime(call2.body())
-                }
-                else {
-                    Log.i("ave", "crash")
-                }
+            if (call.isSuccessful) {
+                val colorCarro = Color.RED
+                drawRoute(call.body(), colorCarro)
 
 
             }
-
-            else {
-                Log.i("ave", "IORO")
+            if (callwalk.isSuccessful) {
+                val colorPersona = Color.BLUE
+                drawRoute_walk(callwalk.body(), colorPersona)
+            } else {
+                Log.i("e", "KO")
             }
         }
     }
 
-    private fun drawRoute(routeResponse: RouteResponse?) {
+    private fun drawRoute(routeResponse: RouteResponse?, color: Int) {
         val polylineOptions = PolylineOptions()
         routeResponse?.features?.first()?.geometry?.coordinates?.forEach {
             polylineOptions.add(LatLng(it[1], it[0]))
         }
+        distancia = routeResponse?.features?.first()?.properties?.summary?.distance
+        distancia = distancia?.div(1000) ?: 0.0
+
+        tiempo = routeResponse?.features?.first()?.properties?.summary?.duration
 
 
+        polylineOptions.color(color)
         runOnUiThread {
-             poly=mMap.addPolyline(polylineOptions)
-        }
-
-    }
-
-    private fun showTime(sumaryResponse: SumaryResponse?){
-        distancia=sumaryResponse?.features2?.first()?.properties?.summary?.distance
-        tiempo=sumaryResponse?.features2?.first()?.properties?.summary?.duration
-        runOnUiThread {
+            poly_caminante = mMap.addPolyline(polylineOptions)
             binding.apply {
-                val distanciaString = distancia?.toString() ?: "0.0"
-                eTkmCarro.text=distanciaString
+                val distanciaString = "%.2f km".format(distancia ?: 0.0)
+                eTkmCarro.text = distanciaString
 
-                val tiempoString = tiempo?.toString() ?: "0.0"
-                eTduracionCarro.text=tiempoString
+
+                eTduracionCarro.text =  formatSecondsToMinutes(tiempo)
 
 
             }
         }
 
+    }
+
+    private fun drawRoute_walk(routeResponse: RouteResponse?, color: Int) {
+        val polylineOptions = PolylineOptions()
+        routeResponse?.features?.first()?.geometry?.coordinates?.forEach {
+            polylineOptions.add(LatLng(it[1], it[0]))
+        }
+        distancia_caminante = routeResponse?.features?.first()?.properties?.summary?.distance
+        distancia_caminante = distancia_caminante?.div(1000) ?: 0.0
+
+        tiempo_caminante = routeResponse?.features?.first()?.properties?.summary?.duration
+
+
+        polylineOptions.color(color)
+
+        runOnUiThread {
+            poly = mMap.addPolyline(polylineOptions)
+            binding.apply {
+                val distanciaString = "%.2f km".format(distancia_caminante ?: 0.0)
+                eTkmPersona.text = distanciaString
+
+
+                eTduracionPersona.text = formatSecondsToMinutes(tiempo_caminante)
+
+
+            }
+        }
 
     }
+    fun formatSecondsToMinutes(seconds: Double?): String {
+        val roundedSeconds = ((seconds?.div(30))?.roundToInt() ?: 0) * 30
+        val minutes = roundedSeconds / 60
+        return String.format("%02d:%02d min", minutes, roundedSeconds % 60)
+    }
+
+
 
     fun getRetrofit(): Retrofit {
         return Retrofit.Builder()

@@ -34,7 +34,8 @@
             android:id="@+id/my_image_view"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:src="@drawable/ic_walk" />
 
         <TextView
@@ -42,9 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:text="Duracion"
+            android:text="Duración:"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -52,21 +51,17 @@
             android:id="@+id/eTduracion_persona"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            tools:text="11:00"
+            android:layout_marginStart="5dp"
+            android:text="0:00 min"
             android:textSize="15sp"
-            android:textStyle="bold" />
+             />
 
         <TextView
             android:id="@+id/km"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:text="Distancia"
+            android:layout_marginStart="40dp"
+            android:text="Distancia:"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -74,12 +69,10 @@
             android:id="@+id/eTkm_persona"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            tools:text="11:00"
+            android:layout_marginStart="5dp"
+            android:text="0.00 km"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            />
 
     </LinearLayout>
     <LinearLayout
@@ -96,7 +89,8 @@
             android:id="@+id/my_image_view2"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:src="@drawable/ic_car" />
 
         <TextView
@@ -104,9 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:text="Duracion"
+            android:text="Duración:"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -114,21 +106,17 @@
             android:id="@+id/eTduracion_carro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            tools:text="11:00"
+            android:layout_marginStart="5dp"
+            android:text="0:00 min"
             android:textSize="15sp"
-            android:textStyle="bold" />
+             />
 
         <TextView
             android:id="@+id/km2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:text="Distancia"
+            android:layout_marginStart="40dp"
+            android:text="Distancia:"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -136,12 +124,10 @@
             android:id="@+id/eTkm_carro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            tools:text="11:00"
+            android:layout_marginStart="5dp"
+            android:text="0.00 km"
             android:textSize="15sp"
-            android:textStyle="bold" />
+             />
 
     </LinearLayout>
 
@@ -149,13 +135,14 @@
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="412dp"
-        android:layout_height="551dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         map:cameraZoom="10"
+        app:layout_constraintTop_toBottomOf="@+id/datosCarro"
         map:uiRotateGestures="true"
         map:uiZoomControls="true" />
 

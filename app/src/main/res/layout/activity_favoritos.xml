@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:background="@drawable/header_background"
         android:orientation="vertical"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:paddingVertical="25dp"
         android:gravity="center"
         android:layout_weight="1">
@@ -38,11 +38,22 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/resultados_visibilidad"
+        android:paddingVertical="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Aún no tienes ningún destino favorito."
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textStyle="italic"
+        android:textColor="@color/black"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="3"
         android:layout_marginTop="16dp" />
 

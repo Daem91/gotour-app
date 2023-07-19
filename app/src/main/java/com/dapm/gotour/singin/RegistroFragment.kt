@@ -33,23 +33,27 @@ class RegistroFragment : Fragment() {
             val username = _binding.emailInput.text.toString()
             val contrasena = _binding.passwordInput.text.toString()
             val confirmar = _binding.confirmarInput.text.toString()
-            val usuario = Usuario(username, contrasena)
-            val registrarse = db.createUsuario(usuario)
 
             if (username.isEmpty() || contrasena.isEmpty() || confirmar.isEmpty()) {
                 Toast.makeText(context, "Faltan Datos", Toast.LENGTH_SHORT).show()
             } else {
-                if (contrasena.equals(confirmar)){
-                    if (registrarse){
-                        Toast.makeText(context, "Registro Exitoso", Toast.LENGTH_SHORT).show()
-                        val fragment = LoginFragment()
-                        val fragmentManager = requireActivity().supportFragmentManager
-                        val transaction = fragmentManager.beginTransaction()
-                        transaction.replace(R.id.main_container, fragment)
-                        transaction.addToBackStack(null)
-                        transaction.commit()
+                val usuario = Usuario(username, contrasena)
+                val registrarse = db.createUsuario(usuario)
+                if (contrasena == confirmar){
+                    if (contrasena.length < 6) {
+                        Toast.makeText(context, "La contraseña debe tener +6 caracteres", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(context, "El Usuario Ya Existe", Toast.LENGTH_SHORT).show()
+                        if (registrarse){
+                            Toast.makeText(context, "Registro Exitoso", Toast.LENGTH_SHORT).show()
+                            val fragment = LoginFragment()
+                            val fragmentManager = requireActivity().supportFragmentManager
+                            val transaction = fragmentManager.beginTransaction()
+                            transaction.replace(R.id.main_container, fragment)
+                            transaction.addToBackStack(null)
+                            transaction.commit()
+                        } else {
+                            Toast.makeText(context, "El Usuario Ya Existe", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 } else {
                     Toast.makeText(context, "La Contraseña No Coincide", Toast.LENGTH_SHORT).show()

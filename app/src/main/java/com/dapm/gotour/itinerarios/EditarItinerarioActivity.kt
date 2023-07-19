@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.dapm.gotour.R
 import com.dapm.gotour.database.config.DataBaseHandler
 import com.dapm.gotour.database.model.Itinerario
@@ -69,30 +70,41 @@ class EditarItinerarioActivity : AppCompatActivity() {
             }
 
             btnGuardar.setOnClickListener {
-                val nombre = etNombre.text.toString()
-                val fechaInicio = etFechaInicio.text.toString()
-                val fechaFin = etFechaFin.text.toString()
-                val idItinerario = intent.getIntExtra("id_itinerario", -1)
 
-                val itinerario = Itinerario(id_itinerario = idItinerario, nombre = nombre,
-                    fecha_inicio = fechaInicio, fecha_fin = fechaFin)
+                if (etNombre.text.isEmpty()) {
+                    mostrarMensajeFallido()
+                } else {
+                    val nombre = etNombre.text.toString()
+                    val fechaInicio = etFechaInicio.text.toString()
+                    val fechaFin = etFechaFin.text.toString()
+                    val idItinerario = intent.getIntExtra("id_itinerario", -1)
 
-                dbHandler.updateItinerario(itinerario)
+                    val itinerario = Itinerario(id_itinerario = idItinerario, nombre = nombre,
+                        fecha_inicio = fechaInicio, fecha_fin = fechaFin)
 
-                val intent = Intent()
-                intent.putExtra("idItinerario", itinerario.id_itinerario)
-                intent.putExtra("nombre", itinerario.nombre)
-                intent.putExtra("fechaInicio", itinerario.fecha_inicio)
-                intent.putExtra("fechaFin", itinerario.fecha_fin)
-                setResult(Activity.RESULT_OK, intent)
-                finish()
+                    dbHandler.updateItinerario(itinerario)
+                    mostrarMensajeExito()
+                    val intent = Intent()
+                    intent.putExtra("idItinerario", itinerario.id_itinerario)
+                    intent.putExtra("nombre", itinerario.nombre)
+                    intent.putExtra("fechaInicio", itinerario.fecha_inicio)
+                    intent.putExtra("fechaFin", itinerario.fecha_fin)
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
 
             }
 
         }
 
+    }
 
+    private fun mostrarMensajeFallido(){
+        Toast.makeText(this,"No puedes dejar ningún campo vacío.", Toast.LENGTH_SHORT).show()
+    }
 
+    private fun mostrarMensajeExito(){
+        Toast.makeText(this,"Itinerario editado con éxito.", Toast.LENGTH_SHORT).show()
     }
     private fun showDatePickerDialogInicio() {
         val datePickerDialog = DatePickerDialog(this, { _, year, month, dayOfMonth ->

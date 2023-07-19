@@ -62,23 +62,26 @@ class AgregarDestinoActivity : AppCompatActivity() {
             } else{
 
                 aceptarAgregar.setOnClickListener{
-                    val nombreItinerarioSeleccionado = binding.spinnerItinerarios.selectedItem as String
 
-                    val itinerarioSeleccionado = itinerarios.find { it.nombre == nombreItinerarioSeleccionado }
+                    if (etFecha.text.isEmpty()) {
+                        mostrarMensajeFallido()
+                    } else {
+                        val nombreItinerarioSeleccionado = binding.spinnerItinerarios.selectedItem as String
 
-                    itinerarioSeleccionado?.let {
-                        val idItinerarioSeleccionado = it.id_itinerario ?:1
-                        Log.e("Fecha" , etFecha.text.toString())
+                        val itinerarioSeleccionado = itinerarios.find { it.nombre == nombreItinerarioSeleccionado }
 
-                        agregarDestinoItinerario(idItinerarioSeleccionado, id_destino, etFecha.text.toString())
+                        itinerarioSeleccionado?.let {
+                            val idItinerarioSeleccionado = it.id_itinerario ?:1
+                            Log.e("Fecha" , etFecha.text.toString())
 
-                        val intent = Intent(this.root.context, ItinerariosActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                            agregarDestinoItinerario(idItinerarioSeleccionado, id_destino, etFecha.text.toString())
 
+                            val intent = Intent(this.root.context, ItinerariosActivity::class.java)
+                            startActivity(intent)
+                            finish()
+
+                        }
                     }
-
-
 
                 }
             }
@@ -89,6 +92,10 @@ class AgregarDestinoActivity : AppCompatActivity() {
     }
     private fun mostrarMensajeExito(){
         Toast.makeText(this,"Destino añadido con éxito.",Toast.LENGTH_SHORT).show()
+    }
+
+    private fun mostrarMensajeFallido(){
+        Toast.makeText(this,"No puedes dejar ningún campo vacío.",Toast.LENGTH_SHORT).show()
     }
 
     private fun agregarDestinoItinerario(idItinerario: Int, idDestino: Int, fecha: String){

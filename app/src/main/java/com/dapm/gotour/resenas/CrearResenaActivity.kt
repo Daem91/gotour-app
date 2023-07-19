@@ -45,6 +45,7 @@ class CrearResenaActivity : AppCompatActivity() {
             if (resena.isNotEmpty()) {
                 crearResena()
                 etNombre.text.clear()
+                Toast.makeText(this, "¡Gracias por comentar!", Toast.LENGTH_SHORT).show()
                 finish()
             } else {
                 Toast.makeText(this, "Tienes que ingresar algo.", Toast.LENGTH_SHORT).show()

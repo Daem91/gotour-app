@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import com.dapm.gotour.R
 import com.dapm.gotour.database.config.DataBaseHandler
 import com.dapm.gotour.database.model.RegistroDestino
@@ -57,16 +58,21 @@ class EditarRegistroActivity : AppCompatActivity() {
 
             aceptarEditar.setOnClickListener {
 
-                val registroEditado = RegistroDestino(registro.id_registro, registro.id_destino,
-                    registro.id_itinerario, etFecha.text.toString())
-                dbHandler.editarRegistro(registroEditado)
+                if (etFecha.text.isEmpty()) {
+                    mostrarMensajeFallido()
+                } else {
+                    val registroEditado = RegistroDestino(registro.id_registro, registro.id_destino,
+                        registro.id_itinerario, etFecha.text.toString())
+                    dbHandler.editarRegistro(registroEditado)
+                    mostrarMensajeExito()
+                    val intent = Intent()
+                    intent.putExtra("idRegistro", registro.id_registro)
+                    intent.putExtra("idItinerario", registro.id_itinerario)
+                    intent.putExtra("fechaActualizada", etFecha.text.toString())
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
 
-                val intent = Intent()
-                intent.putExtra("idRegistro", registro.id_registro)
-                intent.putExtra("idItinerario", registro.id_itinerario)
-                intent.putExtra("fechaActualizada", etFecha.text.toString())
-                setResult(Activity.RESULT_OK, intent)
-                finish()
             }
 
             cancelarEditar.setOnClickListener{
@@ -75,6 +81,14 @@ class EditarRegistroActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    private fun mostrarMensajeFallido(){
+        Toast.makeText(this,"No puedes dejar ningún campo vacío.",Toast.LENGTH_SHORT).show()
+    }
+
+    private fun mostrarMensajeExito(){
+        Toast.makeText(this,"Registro editado con éxito.",Toast.LENGTH_SHORT).show()
     }
 
     private fun showDatePickerDialogInicio() {

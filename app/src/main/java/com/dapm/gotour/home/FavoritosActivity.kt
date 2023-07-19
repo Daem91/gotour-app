@@ -3,6 +3,7 @@ package com.dapm.gotour.home
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dapm.gotour.R
@@ -78,6 +79,12 @@ class FavoritosActivity : AppCompatActivity() {
         val destinos = dataBaseHandler.obtenerFavoritosPorUsername(username)
         destinoAdapter = DestinoAdapter(destinos)
         recyclerView.adapter = destinoAdapter
+
+        if (destinos.isEmpty()) {
+            binding.resultadosVisibilidad.visibility = View.VISIBLE
+        } else {
+            binding.resultadosVisibilidad.visibility = View.GONE
+        }
 
     }
 }

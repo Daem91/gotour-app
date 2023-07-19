@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -52,6 +53,12 @@ class VerItinerarioActivity : AppCompatActivity() {
         adapter = RegistroDestinoAdapter(destinosRegistrados, idItinerario)
         recyclerView.adapter = adapter
 
+        if (destinosRegistrados.isEmpty()) {
+            binding.resultadosVisibilidad.visibility = View.VISIBLE
+        } else {
+            binding.resultadosVisibilidad.visibility = View.GONE
+        }
+
         binding.apply {
             compartir.setOnClickListener {
                 val nombreItinerario = nameItinerario ?: ""
@@ -85,6 +92,11 @@ class VerItinerarioActivity : AppCompatActivity() {
             if (idRegistroActualizado != -1 && !fechaActualizada.isNullOrEmpty()) {
                 val dbHandler = DataBaseHandler(this)
                 val nuevaLista = dbHandler.obtenerDestinosRegistradosPorItinerario(idItinerarioActualizado)
+                if (nuevaLista.isEmpty()) {
+                    binding.resultadosVisibilidad.visibility = View.VISIBLE
+                } else {
+                    binding.resultadosVisibilidad.visibility = View.GONE
+                }
                 adapter.actualizarDatos(nuevaLista)
             }
         }

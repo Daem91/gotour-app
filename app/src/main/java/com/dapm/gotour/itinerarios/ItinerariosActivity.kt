@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -110,6 +111,11 @@ class ItinerariosActivity : AppCompatActivity() {
 
         // Obtener los itinerarios y actualizar el adaptador
         val itinerarios = obtenerItinerarios()
+        if (itinerarios.isEmpty()) {
+            binding.resultadosVisibilidad.visibility = View.VISIBLE
+        } else {
+            binding.resultadosVisibilidad.visibility = View.GONE
+        }
         adapter?.let {
             it.addItems(itinerarios)
         }
@@ -125,6 +131,11 @@ class ItinerariosActivity : AppCompatActivity() {
             if (idItinerario != -1 && !fechaInicio.isNullOrEmpty()&& !fechaFin.isNullOrEmpty()&& !nombre.isNullOrEmpty()) {
                 val dbHandler = DataBaseHandler(this)
                 val nuevaLista = dbHandler.obtenerItinerariosPorUsername(username)
+                if (nuevaLista.isEmpty()) {
+                    binding.resultadosVisibilidad.visibility = View.VISIBLE
+                } else {
+                    binding.resultadosVisibilidad.visibility = View.GONE
+                }
                 adapter?.actualizarDatosItinerario(nuevaLista)
             }
         }

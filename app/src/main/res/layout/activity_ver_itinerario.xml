@@ -93,6 +93,17 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/resultados_visibilidad"
+        android:paddingVertical="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Aún no has agregado ningún destino."
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textStyle="italic"
+        android:textColor="@color/black"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

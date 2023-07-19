@@ -116,7 +116,8 @@ class DetalleActivity : AppCompatActivity() {
         for (tag in tags){
             val tagTextView = TextView(this)
             tagTextView.text = tag
-            tagTextView.setPadding(55,25,55,25)
+            tagTextView.textSize = 13.5F
+            tagTextView.setPadding(30,15,30,15)
             tagTextView.setBackgroundResource(R.drawable.tag_background)
             val color = ContextCompat.getColor(this, R.color.orange)
             tagTextView.setTextColor(color)

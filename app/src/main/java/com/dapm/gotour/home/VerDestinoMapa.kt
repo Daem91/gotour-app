@@ -41,7 +41,6 @@ class VerDestinoMapa : AppCompatActivity(), OnMapReadyCallback {
 
 
     private lateinit var mMap: GoogleMap
-    private lateinit var btnCalculate: Button
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var binding: ActivityVerDestinoMapaBinding
 
@@ -99,29 +98,31 @@ class VerDestinoMapa : AppCompatActivity(), OnMapReadyCallback {
         end = "${longitud},${latitud}"
 
 
-
         enableLocation()
     }
+
+
 
     private fun isLocationPermissionGranted() = ContextCompat.checkSelfPermission(
         this,
         Manifest.permission.ACCESS_FINE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
 
-    @SuppressLint("MissingPermission")
+
     private fun enableLocation() {
         if (!::mMap.isInitialized) return
         if (isLocationPermissionGranted()) {
             mMap.isMyLocationEnabled = true
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 location?.let {
-                    val currentLatLng = LatLng(it.latitude, it.longitude)
                     val currentLat = it.latitude
                     val currentLng = it.longitude
                     start = "${currentLng},${currentLat}"
                     createRoute()
                 }
             }
+
+
         } else {
             requestLocationPermission()
         }
@@ -150,6 +151,7 @@ class VerDestinoMapa : AppCompatActivity(), OnMapReadyCallback {
         when (requestCode) {
             REQUEST_CODE_LOCATION -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mMap.isMyLocationEnabled = true
+                enableLocation()
             } else {
                 Toast.makeText(
                     this,
@@ -222,7 +224,7 @@ class VerDestinoMapa : AppCompatActivity(), OnMapReadyCallback {
                 eTkmCarro.text = distanciaString
 
 
-                eTduracionCarro.text =  formatSecondsToMinutes(tiempo)
+                eTduracionCarro.text = formatSecondsToMinutes(tiempo)
 
 
             }
@@ -257,12 +259,12 @@ class VerDestinoMapa : AppCompatActivity(), OnMapReadyCallback {
         }
 
     }
+
     fun formatSecondsToMinutes(seconds: Double?): String {
         val roundedSeconds = ((seconds?.div(30))?.roundToInt() ?: 0) * 30
         val minutes = roundedSeconds / 60
         return String.format("%02d:%02d min", minutes, roundedSeconds % 60)
     }
-
 
 
     fun getRetrofit(): Retrofit {
